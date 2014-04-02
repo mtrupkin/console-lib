@@ -3,15 +3,16 @@ package flagship.console.terminal
 import javax.swing.WindowConstants
 
 import java.awt.image.BufferStrategy
-import java.awt._
+
 import scala.swing.{BorderPanel, Frame}
 import scala.swing.event.{KeyReleased, Key, KeyPressed}
 import java.awt.event.{MouseEvent, MouseAdapter, KeyEvent, KeyAdapter}
-import org.flagship.console.screen.{ConsoleKey, ConsoleKeyModifier}
-import org.flagship.console._
-import org.flagship.console.screen.ConsoleKeyModifier
 import org.flagship.console.{Size, Point}
-import java.net.URL
+import java.awt._
+import scala.Some
+import org.flagship.console.screen.ConsoleKeyModifier
+import org.flagship.console.Size
+import org.flagship.console.screen._
 
 
 /**
@@ -217,32 +218,34 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
     }
   }
 
-  def toAwtColor(c: Color): java.awt.Color = {
+  import org.flagship.console.screen.RGBColor._
+
+  def toAwtColor(c: RGBColor): java.awt.Color = {
     c match {
-      case Color.Black => java.awt.Color.BLACK
-      case Color.White => java.awt.Color.WHITE
-      case Color.Yellow => java.awt.Color.YELLOW
-      case Color.Red => java.awt.Color.RED
-      case Color.Green => java.awt.Color.GREEN
-      case Color.Blue => java.awt.Color.BLUE
-      case Color.LightYellow => AwtColor.LightYellow
-      case Color.LightGreen => AwtColor.LightGreen
-      case Color.LightBlue => AwtColor.LightBlue
-      case Color.LightRed => AwtColor.LightRed
-      case Color.LightGrey => AwtColor.LightGrey
+      case Black => java.awt.Color.BLACK
+      case White => java.awt.Color.WHITE
+      case Yellow => java.awt.Color.YELLOW
+      case Red => java.awt.Color.RED
+      case Green => java.awt.Color.GREEN
+      case Blue => java.awt.Color.BLUE
+      case LightYellow => AwtColor.LightYellow
+      case LightGreen => AwtColor.LightGreen
+      case LightBlue => AwtColor.LightBlue
+      case LightRed => AwtColor.LightRed
+      case LightGrey => AwtColor.LightGrey
       case _ =>  ???
     }
   }
 }
 
 object AwtColor {
-  val LightYellow = getAwtColor(Color.LightYellow)
-  val LightRed = getAwtColor(Color.LightRed)
-  val LightBlue = getAwtColor(Color.LightBlue)
-  val LightGreen = getAwtColor(Color.LightGreen)
-  val LightGrey = getAwtColor(Color.LightGrey)
+  val LightYellow = getAwtColor(RGBColor.LightYellow)
+  val LightRed = getAwtColor(RGBColor.LightRed)
+  val LightBlue = getAwtColor(RGBColor.LightBlue)
+  val LightGreen = getAwtColor(RGBColor.LightGreen)
+  val LightGrey = getAwtColor(RGBColor.LightGrey)
 
-  def getAwtColor(c: Color): java.awt.Color = new java.awt.Color(c.r, c.g, c.b)
+  def getAwtColor(c: org.flagship.console.screen.RGBColor): java.awt.Color = new java.awt.Color(c.r, c.g, c.b)
 }
 
 

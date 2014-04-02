@@ -1,6 +1,7 @@
 package org.flagship.console.screen
 
 import org.flagship.console.{Point, Size}
+import org.flagship.console.screen.RGBColor._
 
 /**
  * User: mtrupkin
@@ -11,8 +12,8 @@ class Screen(size: Size) {
   def height: Int = size.height
 
   val blank = ScreenCharacter(' ')
-  var fg = Color.White
-  var bg = Color.Black
+  var fg = White
+  var bg = Black
   var cursor = Point(0, 0)
   val buffer = Array.ofDim[ScreenCharacter](size.width, size.height)
 
@@ -61,7 +62,7 @@ class Screen(size: Size) {
     this(x, y) = ScreenCharacter(c, fg, bg)
   }
 
-  def write(x: Int, y: Int, c: Char, fg0: Color, bg0: Color) {
+  def write(x: Int, y: Int, c: Char, fg0: RGBColor, bg0: RGBColor) {
     this(x, y) = ScreenCharacter(c, fg0, bg0)
   }
 
@@ -95,9 +96,9 @@ object Screen {
   def apply(size: Size) = new Screen(size)
 }
 
-case class ScreenCharacter(val c: Char, val fg: Color, val bg: Color)
+case class ScreenCharacter(val c: Char, val fg: RGBColor, val bg: RGBColor)
 
 object ScreenCharacter {
-  def apply(c: Char) = new ScreenCharacter(c, Color.White, Color.Black)
+  def apply(c: Char) = new ScreenCharacter(c, White, Black)
 }
 

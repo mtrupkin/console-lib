@@ -16,7 +16,7 @@ class GUIConsole(val terminal: Terminal, val window: Composite) {
   val screen = Screen(terminal.terminalSize)
 
 
-  def completed(): Boolean = (window.closed || terminal.closed)
+  def completed(): Boolean = terminal.closed
 
   var consoleKey: Option[ConsoleKey] = None
 
