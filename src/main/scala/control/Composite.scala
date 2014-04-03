@@ -10,6 +10,25 @@ import org.flagship.console.control.LayoutFlow._
  * Date: 7/8/13
  */
 class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL) extends Control {
+  val borderSize = Size(2, 2)
+
+  def elementSize: Size = {
+    var width = 0
+    var height = 0
+
+    if (controls != null) {
+      controls.foreach(c => {
+        if (c.right > width)
+          width = c.right
+        if (c.bottom > height)
+          height = c.bottom} )
+    }
+
+    new Size(width, height)
+  }
+
+  override def minSize = elementSize.add(borderSize)
+
 
   var controls = List[Control]()
 
@@ -80,20 +99,6 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
     }
   }
 
-  override def minSize: Size = {
-    var width = 0
-    var height = 0
-
-    if (controls != null) {
-      controls.foreach(c => {
-      if (c.right > width)
-        width = c.right
-      if (c.bottom > height)
-        height = c.bottom} )
-    }
-
-    new Size(width, height)
-  }
 
   override def mouseClicked(mouse: Point) {
     val m = new Point(mouse.x - position.x, mouse.y - position.y)

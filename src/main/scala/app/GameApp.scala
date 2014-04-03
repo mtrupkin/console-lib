@@ -1,13 +1,12 @@
-package org.trupkin
+package org.flagship.console.app
 
 /**
  * User: mtrupkin
  * Date: 11/29/13
  */
 
-import scala.Some
-import flagship.console.widget.Window
-import flagship.console.terminal.{GUIConsole, SwingTerminal}
+
+import org.flagship.console.terminal.{GUIConsole, SwingTerminal}
 import org.flagship.console.Size
 
 

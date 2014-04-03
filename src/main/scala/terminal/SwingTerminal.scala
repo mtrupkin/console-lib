@@ -1,6 +1,5 @@
-package flagship.console.terminal
+package org.flagship.console.terminal
 
-import javax.swing.WindowConstants
 
 import java.awt.image.BufferStrategy
 
@@ -9,8 +8,6 @@ import scala.swing.event.{KeyReleased, Key, KeyPressed}
 import java.awt.event.{MouseEvent, MouseAdapter, KeyEvent, KeyAdapter}
 import org.flagship.console.{Size, Point}
 import java.awt._
-import scala.Some
-import org.flagship.console.screen.ConsoleKeyModifier
 import org.flagship.console.Size
 import org.flagship.console.screen._
 
@@ -94,9 +91,10 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   pack()
 
-  val url = ClassLoader.getSystemResource("icon.png")
-  val img = Toolkit.getDefaultToolkit().createImage(url)
-  peer.setIconImage(img)
+//  val url = ClassLoader.getSystemResource("icon.png")
+//  val img = Toolkit.getDefaultToolkit().createImage(url)
+//  peer.setIconImage(img)
+
   peer.setLocationRelativeTo(null)
 
   terminalCanvas.createBufferStrategy(2)

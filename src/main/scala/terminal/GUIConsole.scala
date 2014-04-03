@@ -1,4 +1,4 @@
-package flagship.console.terminal
+package org.flagship.console.terminal
 
 import org.flagship.console.screen._
 

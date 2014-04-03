@@ -9,11 +9,11 @@ import org.flagship.console.screen._
  * Date: 7/6/13
  */
 trait Control {
-  def minSize: Size = Size(0, 0)
-
+  def minSize: Size = Size(1, 1)
   var dimension: Size = minSize
+
   var position = Point.Origin
-  var controlLayout: Layout = Layout.NONE
+  var layout: Layout = Layout.NONE
 
   def right: Int = position.x + dimension.width
   def bottom: Int = position.y + dimension.height
@@ -22,26 +22,26 @@ trait Control {
 
   def keyPressed(key: ConsoleKey) {}
   def mouseClicked(mouse: Point) {}
-  def update(elapsedTime: Int) = {}
+  def update(elapsedTime: Int) {}
 
   def compact() {
     dimension = minSize
   }
 
   def grab(size: Size): Unit = {
-    if (controlLayout.right == LayoutOp.GRAB) {
+    if (layout.right == LayoutOp.GRAB) {
       dimension = dimension.copy(width = size.width - position.x)
     }
-    if (controlLayout.bottom == LayoutOp.GRAB) {
+    if (layout.bottom == LayoutOp.GRAB) {
       dimension = dimension.copy(height = size.height - position.y)
     }
   }
 
   def snap(size: Size) {
-    if (controlLayout.right == LayoutOp.SNAP) {
+    if (layout.right == LayoutOp.SNAP) {
       position = position.copy(x = size.width - dimension.width)
     }
-    if (controlLayout.bottom == LayoutOp.SNAP) {
+    if (layout.bottom == LayoutOp.SNAP) {
       position = position.copy(y = size.height - dimension.height)
     }
   }
