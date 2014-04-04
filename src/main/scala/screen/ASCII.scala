@@ -5,7 +5,7 @@ package org.flagship.console.screen
  * but converted to its UTF-8 counterpart.
  * @author martin
  */
-object ACS {
+object ASCII {
   val ULCORNER: Char = 0x250C
   val URCORNER: Char = 0x2510
   val LLCORNER: Char = 0x2514

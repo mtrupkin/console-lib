@@ -7,6 +7,7 @@ package org.flagship.console
 
 case class Size(width: Int, height: Int) {
   def add(s: Size): Size = Size(this.width + s.width, this.height + s.height)
+  def subtract(s: Size): Size = Size(this.width - s.width, this.height - s.height)
 }
 
 object SizeImplicits {

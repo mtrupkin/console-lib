@@ -31,7 +31,14 @@ trait Terminal {
 
 class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: String = "Swing Terminal") extends Frame with Terminal {
   val terminalCanvas = new TerminalCanvas(terminalSize)
-  val normalTextFont = new Font("Courier New", Font.PLAIN, 14)
+  //val normalTextFont = new Font("Courier New", Font.PLAIN, 14)
+  //val normalTextFont = new Font("Monospaced", Font.PLAIN, 14)
+  val normalTextFont = new Font("Consolas", Font.PLAIN, 18)
+  //val normalTextFont = normalTextFont1.deriveFont(15.5f)
+  //val normalTextFont = new Font("Lucida Console", Font.PLAIN, 14)
+  //val normalTextFont = new Font("Lucida Sans Typewriter", Font.PLAIN, 14)
+
+
   val systemFont = new Font("Arial", Font.PLAIN, 10)
 
   peer.add(terminalCanvas)
@@ -113,7 +120,10 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
     def getGraphics2D(g: Graphics): Graphics2D = {
       g match {
-        case g2: Graphics2D => g2
+        case g2: Graphics2D => {
+          g2.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON)
+          g2
+        }
         case _ => throw new ClassCastException
       }
     }
@@ -128,15 +138,22 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
     }
 
     def charSize(g: Graphics): Size = {
+      val g2 = getGraphics2D(g)
+
 
       val fontMetrics = g.getFontMetrics(normalTextFont)
       //val bounds = fontMetrics.getStringBounds(" ", g)
       //val bounds = fontMetrics.getStringBounds(ACS.VLINE.toString, g)
-      val width = fontMetrics.charWidth(ACS.HLINE)
+      val width = fontMetrics.charWidth(ASCII.HLINE)
+
+      val maxCharBounds = normalTextFont.getMaxCharBounds(g2.getFontRenderContext)
+      val isAntiAliased = g2.getFontRenderContext.isAntiAliased
+
 
       //new Size(width , fontMetrics.getAscent()*2)
       //new Size(bounds.getWidth.toInt+1, bounds.getHeight.toInt+2)
-      new Size(width, fontMetrics.getHeight)
+      //new Size(width, fontMetrics.getHeight)
+      Size(width, maxCharBounds.getBounds.height)
     }
 
     def screenSize(charSize: Size): Size = {
