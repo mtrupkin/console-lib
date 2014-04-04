@@ -1,9 +1,10 @@
 package org.flagship.console.app
 
-import org.flagship.console.control.{Control, Layout, LayoutFlow, Composite}
+import org.flagship.console.control._
 import org.flagship.console.control.LayoutOp._
 import org.flagship.console.Size
 import org.flagship.console.screen.{Screen, ConsoleKey}
+import org.flagship.console.Size
 
 
 /**
@@ -13,22 +14,23 @@ class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL
   var time = 0
   layout = Layout(right = GRAB, bottom = GRAB)
 
-  val topPanel = new Composite(name = "topPanel", LayoutFlow.HORIZONTAL)
+  val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE_SANS_BOTTOM)
   topPanel.layout = Layout(right = GRAB, bottom = NONE)
 
-  val bottomPanel = new Composite(name = "bottomPanel")
+  val bottomPanel = new Composite(name = "bottomPanel", border = Border.SINGLE_TEE_TOP)
   bottomPanel.layout = Layout(right = GRAB, bottom = GRAB)
 
-  val mainPanel = new Composite(name = "mainPanel")
+  val mainPanel = new Composite(name = "mainPanel", border = Border.SINGLE)
   mainPanel.layout = Layout(right = GRAB, bottom = NONE)
 
   val mapPanel = new Control {
     override def minSize = Size(20, 10)
-    override def render(screen: Screen): Unit = {screen.write("@ t i")}
+    override def render(screen: Screen): Unit = screen.write("@ t i")
   }
+
   mainPanel.addControl(mapPanel)
 
-  val detailPanel = new Composite(name = "detailPanel", LayoutFlow.HORIZONTAL)
+  val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE)
   detailPanel.layout = Layout(right = GRAB, bottom = NONE)
   val label1 = new Control {
     override def minSize = Size(20, 1)

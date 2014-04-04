@@ -9,7 +9,7 @@ import org.flagship.console.control.LayoutFlow._
  * User: mtrupkin
  * Date: 7/8/13
  */
-class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL) extends Control {
+class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL, val border: Border = Border.NONE) extends Control {
   def elementSize: Size = {
     var width = 1
     var height = 1
@@ -25,7 +25,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
     new Size(width, height)
   }
 
-  override def minSize = elementSize.add(Border.borderSize)
+  override def minSize = elementSize.add(border.borderSize)
 
 
   var controls = List[Control]()
@@ -35,7 +35,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
   }
 
   def render(screen: Screen) {
-    Border.render(dimension, Box.DOUBLE, screen)
+
     val elementScreen = Screen(elementSize)
 
     val tmp = name
@@ -46,7 +46,8 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
       c.render(controlScreen)
       elementScreen.display(c.position, controlScreen)
     })
-    screen.display(Point(1,1), elementScreen)
+
+    border.renderBorder(dimension, screen, elementScreen)
   }
 
   def arrange(size: Size) {
@@ -70,7 +71,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
   override def snap(size: Size) {
     super.snap(size)
     //layoutManager.snap(dimension, controls)
-    var remaining: Size = Size(dimension.width, dimension.height).subtract(Border.borderSize)
+    var remaining: Size = Size(dimension.width, dimension.height).subtract(border.borderSize)
     if (layoutFlow == HORIZONTAL) {
 
       for (c <- controls.reverse) {
@@ -89,7 +90,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
   override def grab(size: Size): Unit = {
     super.grab(size)
     //layoutManager.grab(dimension, controls)
-    var remaining: Size = Size(dimension.width, dimension.height).subtract(Border.borderSize)
+    var remaining: Size = Size(dimension.width, dimension.height).subtract(border.borderSize)
 
     if (layoutFlow == HORIZONTAL) {
       for(c <- controls.reverse) {
@@ -133,47 +134,4 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL)
       lastPos = Point(0, c.bottom)
     }
   }
-}
-
-object Border {
-  val borderSize = Size(2, 2)
-
-  def render(size: Size, box: Box, screen: Screen) {
-    import screen.write
-    import size.{width, height}
-
-    // corners
-    write(0, 0, box.topLeft)
-    write(width - 1, 0, box.topRight)
-    write(0, height - 1, box.bottomLeft)
-    write(width - 1, height - 1, box.bottomRight)
-
-    // sides
-    for(x <- 1 until width-1 ) {
-      write(x, 0, box.top)
-      write(x, height - 1, box.bottom)
-    }
-
-    for(y <- 1 until height-1 ) {
-      write(0, y, box.left)
-      write(0 + width - 1, y, box.right)
-    }
-  }
-}
-
-case class Box(
-  topLeft: Char, top: Char, topRight: Char,
-  left: Char, right: Char,
-  bottomLeft: Char, bottom: Char, bottomRight: Char)
-
-object Box {
-  val SINGLE = Box(
-    ASCII.ULCORNER, ASCII.HLINE, ASCII.URCORNER,
-    ASCII.VLINE, ASCII.VLINE,
-    ASCII.LLCORNER, ASCII.HLINE, ASCII.LRCORNER)
-
-  val DOUBLE = Box(
-    ASCII.DOUBLE_LINE_UP_LEFT_CORNER, ASCII.DOUBLE_LINE_HORIZONTAL, ASCII.DOUBLE_LINE_UP_RIGHT_CORNER,
-    ASCII.DOUBLE_LINE_VERTICAL, ASCII.DOUBLE_LINE_VERTICAL,
-    ASCII.DOUBLE_LINE_LOW_LEFT_CORNER, ASCII.DOUBLE_LINE_HORIZONTAL, ASCII.DOUBLE_LINE_LOW_RIGHT_CORNER)
 }
