@@ -11,43 +11,36 @@ class Screen(size: Size) {
   def width: Int = size.width
   def height: Int = size.height
 
-  val blank = ScreenCharacter(' ')
   var fg = White
   var bg = Black
-  var cursor = Point(0, 0)
-  val buffer = Array.ofDim[ScreenCharacter](size.width, size.height)
+  var cursor = Point.Origin
+  val buffer = Array.ofDim[ScreenChar](size.width, size.height)
 
   clear()
 
-  def clear() {
-    for {
-      i <- 0 until size.width
-      j <- 0 until size.height
-    } this(i, j) = blank
-  }
+  def clear() = foreach((p, s) => this(p) = ScreenChar.Blank)
 
-  def apply(x: Int, y: Int): ScreenCharacter = {
+  def apply(x: Int, y: Int): ScreenChar = {
     buffer(x)(y)
   }
 
-  def apply(point: Point): ScreenCharacter = {
-    this(point.x, point.y)
+  def apply(p: Point): ScreenChar = {
+    this(p.x, p.y)
   }
 
-  def update(x: Int, y: Int, sc: ScreenCharacter ) {
+  def update(x: Int, y: Int, sc: ScreenChar ) {
     buffer(x)(y) = sc
   }
 
-  def update(point: Point, sc: ScreenCharacter) {
-    update(point.x, point.y, sc)
+  def update(p: Point, sc: ScreenChar) {
+    update(p.x, p.y, sc)
   }
 
-  def foreach(f: (Point, ScreenCharacter) => Unit ) {
-    for {
-      i <- 0 until size.width
+  def foreach(f: (Point, ScreenChar) => Unit ) {
+    for (
+      i <- 0 until size.width;
       j <- 0 until size.height
-      //if (this(i, j) != blank)
-    } f(Point(i, j), this(i, j))
+    ) f(Point(i, j), this(i, j))
   }
 
   def move(x: Int, y: Int) {
@@ -55,19 +48,18 @@ class Screen(size: Size) {
   }
 
   def write(c: Char) {
-    this(cursor.x, cursor.y) = ScreenCharacter(c, fg, bg)
+    this(cursor.x, cursor.y) = ScreenChar(c, fg, bg)
   }
 
   def write(x: Int, y: Int, c: Char) {
-    this(x, y) = ScreenCharacter(c, fg, bg)
+    this(x, y) = ScreenChar(c, fg, bg)
   }
 
   def write(x: Int, y: Int, c: Char, fg0: RGBColor, bg0: RGBColor) {
-    this(x, y) = ScreenCharacter(c, fg0, bg0)
+    this(x, y) = ScreenChar(c, fg0, bg0)
   }
 
   def write(s: String) {
-    //this(cursor.x, cursor.y) = ScreenCharacter(s.charAt(0), fg, bg)
     write(0, 0, s)
   }
 
@@ -76,30 +68,16 @@ class Screen(size: Size) {
     s.foreach( c => { write(pos, y, c); pos += 1 } )
   }
 
-  def display(x: Int, y: Int, screen: Screen) {
-    screen.foreach(drawScreenCharacter)
-
-    def drawScreenCharacter(p: Point, s: ScreenCharacter) {
-      update(p.x + x, p.y + y, s)
-    }
-  }
-
-  def display(p1: Point, screen: Screen) {
-    screen.foreach(drawScreenCharacter)
-
-    def drawScreenCharacter(p2: Point, s: ScreenCharacter) {
-      update(p1.move(p2), s)
-    }
-  }
+  def display(x: Int, y: Int, screen: Screen): Unit = display(Point(x, y), screen)
+  def display(p: Point, screen: Screen): Unit = screen.foreach((p0, s) => this(p + p0) = s)
 }
 
 object Screen {
   def apply(size: Size) = new Screen(size)
 }
 
-case class ScreenCharacter(val c: Char, val fg: RGBColor, val bg: RGBColor)
+case class ScreenChar(c: Char, fg: RGBColor = White, bg: RGBColor = Black)
 
-object ScreenCharacter {
-  def apply(c: Char) = new ScreenCharacter(c, White, Black)
+object ScreenChar {
+  val Blank = ScreenChar(' ')
 }
-

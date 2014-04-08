@@ -5,6 +5,8 @@ import org.flagship.console.control.LayoutOp._
 import org.flagship.console.Size
 import org.flagship.console.screen.{Screen, ConsoleKey}
 import org.flagship.console.Size
+import map.MapWidget
+import model.World
 
 
 /**
@@ -23,10 +25,7 @@ class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL
   val mainPanel = new Composite(name = "mainPanel", border = Border.SINGLE)
   mainPanel.layout = Layout(right = GRAB, bottom = NONE)
 
-  val mapPanel = new Control {
-    override def minSize = Size(20, 10)
-    override def render(screen: Screen): Unit = screen.write("@ t i")
-  }
+  val mapPanel = new MapWidget(new World(Size(40, 20)))
 
   mainPanel.addControl(mapPanel)
 

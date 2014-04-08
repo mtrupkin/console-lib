@@ -199,7 +199,7 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
         screen.foreach(drawScreenCharacter)
 
-        def drawScreenCharacter(p: Point, s: ScreenCharacter) {
+        def drawScreenCharacter(p: Point, s: ScreenChar) {
 
           g2.setColor(toAwtColor(s.fg))
           drawString(p, s.c.toString)
