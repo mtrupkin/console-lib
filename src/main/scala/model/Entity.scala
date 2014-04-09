@@ -11,5 +11,7 @@ class Entity(
   val sc: ScreenChar) {
 }
 
-class Player(name: String, position: Point, sc: ScreenChar)
-  extends Entity(name, position, sc)
+class Player(name: String, p: Point, sc: ScreenChar)
+  extends Entity(name, p, sc) {
+  def move(p: Point) { position = position + p }
+}

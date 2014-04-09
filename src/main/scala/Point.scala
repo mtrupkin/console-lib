@@ -6,14 +6,7 @@ package org.flagship.console
  */
 
 case class Point(x: Int, y: Int) {
-  def move(p: Point): Point = Point(x + p.x, y + p.y)
-  def +(p: Point) = Point(x + p.x, y + p.y)
-
-  import Point._
-  def up() { move(Up) }
-  def down() { move(Down) }
-  def left() { move(Left) }
-  def right() { move(Right) }
+  def +(p: Point): Point = Point(x + p.x, y + p.y)
 }
 
 object PointImplicits {

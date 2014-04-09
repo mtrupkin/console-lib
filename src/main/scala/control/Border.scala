@@ -26,6 +26,11 @@ object Box {
     ASCII.SINGLE_LINE_T_RIGHT, ASCII.HLINE, ASCII.SINGLE_LINE_T_LEFT,
     ASCII.VLINE, ASCII.VLINE,
     ASCII.LLCORNER, ASCII.HLINE, ASCII.LRCORNER)
+
+  val SINGLE_TEE_LEFT = Box(
+    ASCII.SINGLE_LINE_T_LEFT, ASCII.HLINE, ASCII.URCORNER,
+    ASCII.VLINE, ASCII.VLINE,
+    ASCII.SINGLE_LINE_T_LEFT, ASCII.HLINE, ASCII.LRCORNER)
 }
 
 case class BorderSides(left: Boolean = true, right: Boolean = true, top: Boolean = true, bottom: Boolean = true)

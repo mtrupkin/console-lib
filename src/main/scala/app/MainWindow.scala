@@ -2,9 +2,8 @@ package org.flagship.console.app
 
 import org.flagship.console.control._
 import org.flagship.console.control.LayoutOp._
-import org.flagship.console.Size
+import org.flagship.console.{Point, Size}
 import org.flagship.console.screen.{Screen, ConsoleKey}
-import org.flagship.console.Size
 import map.MapWidget
 import model.World
 
@@ -14,6 +13,7 @@ import model.World
  */
 class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL) {
   var time = 0
+  var world = new World()
   layout = Layout(right = GRAB, bottom = GRAB)
 
   val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE_SANS_BOTTOM)
@@ -22,15 +22,17 @@ class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL
   val bottomPanel = new Composite(name = "bottomPanel", border = Border.SINGLE_TEE_TOP)
   bottomPanel.layout = Layout(right = GRAB, bottom = GRAB)
 
-  val mainPanel = new Composite(name = "mainPanel", border = Border.SINGLE)
+  val mainPanel = new Composite(name = "mainPanel", border = Border.NONE)
   mainPanel.layout = Layout(right = GRAB, bottom = NONE)
 
-  val mapPanel = new MapWidget(new World(Size(40, 20)))
-
+  val mapPanel = new MapWidget(world)
   mainPanel.addControl(mapPanel)
 
-  val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE)
-  detailPanel.layout = Layout(right = GRAB, bottom = NONE)
+  val detailBorder = new Border(box = Box.SINGLE_TEE_LEFT, BorderSides(right = false, top = false, bottom = false))
+
+  val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.VERTICAL, border = detailBorder)
+  detailPanel.layout = Layout(right = GRAB, bottom = GRAB)
+
   val label1 = new Control {
     override def minSize = Size(20, 1)
     override def render(screen: Screen): Unit = {
@@ -53,8 +55,6 @@ class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL
   detailPanel.addControl(label2)
   detailPanel.addControl(label3)
 
-
-
   topPanel.addControl(mainPanel)
   topPanel.addControl(detailPanel)
 
@@ -68,15 +68,19 @@ class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL
 
     val k = key.keyValue
     k match {
+      case W | Up => world.player.move(Point.Up)
+      case A | Left => world.player.move(Point.Left)
+      case S | Down => world.player.move(Point.Down)
+      case D | Right => world.player.move(Point.Right)
+      case Enter => ???
+      case Escape => ???
+      case _ =>
       case _ =>
     }
   }
 
-  def accept() {
-  }
-
   override def update(elapsedTime: Int) {
     time += elapsedTime
+    world.update(elapsedTime)
   }
-
 }
