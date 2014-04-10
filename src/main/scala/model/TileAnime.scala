@@ -1,0 +1,69 @@
+package model
+
+import org.flagship.console.screen.{RGBColor, ScreenChar}
+import scala.util.Random
+
+// Created: 4/10/2014
+
+object Animations {
+  val flip = List(ScreenChar('\\', fg = RGBColor.LightGrey),
+    ScreenChar('|', fg = RGBColor.LightGrey),
+    ScreenChar('/', fg = RGBColor.LightGrey),
+    ScreenChar('-', fg = RGBColor.LightGrey))
+}
+
+trait TileAnime {
+  var totalElapsedTime = 0
+  def apply(elapsed: Int): ScreenChar = {
+    totalElapsedTime += elapsed
+    animate(elapsed)
+  }
+
+  def animate(elapsed: Int): ScreenChar
+}
+
+class StaticAnime(val sc: ScreenChar) extends TileAnime {
+  def animate(elapsed: Int): ScreenChar = sc
+}
+
+class TempAnime(val oldAnim: TileAnime, val newAnim: TileAnime, val time: Int) extends TileAnime {
+  def animate(elapsed: Int): ScreenChar = {
+    if ( totalElapsedTime < time ) newAnim(elapsed) else oldAnim(elapsed)
+  }
+}
+
+class DelayedAnime(val currAnim: TileAnime, val newAnim: TileAnime, val delay: Int) extends TileAnime {
+  def animate(elapsed: Int): ScreenChar = {
+    if ( totalElapsedTime < delay ) currAnim(elapsed) else newAnim(elapsed)
+  }
+}
+
+class FrameAnime(val frames: List[ScreenChar], val cycleTime: Int = 500) extends TileAnime {
+  def animate(elapsed: Int): ScreenChar = {
+    val timeSlice = totalElapsedTime / cycleTime
+    val frameIndex = timeSlice % frames.size
+    frames(frameIndex)
+  }
+}
+
+class SparkleAnime(val sc: ScreenChar, val frequency: Int = 1, val duration: Int = 500) extends TileAnime {
+  var sparkleOn: Boolean = false
+  val sparkleOnChar: ScreenChar = ScreenChar('.')
+  val delay = Random.nextInt(1000)
+
+  def animate(elapsed: Int): ScreenChar = {
+    if (sparkleOn) {
+      if (totalElapsedTime > duration) {
+        totalElapsedTime = 0
+        sparkleOn = false
+      }
+      sparkleOnChar
+    } else {
+      if (totalElapsedTime + delay > 1000) {
+        if (Random.nextInt(1000) < frequency) sparkleOn = true
+        totalElapsedTime = 0
+      }
+      sc
+    }
+  }
+}

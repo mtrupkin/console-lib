@@ -11,7 +11,7 @@ import org.flagship.console.control.Composite
  * Date: 7/5/13
  */
 class GUIConsole(val terminal: Terminal, val window: Composite) {
-  val framesPerSecond = 23
+  val framesPerSecond = 25
   val refreshRate = (1f / framesPerSecond) * 1000
   val screen = Screen(terminal.terminalSize)
 
