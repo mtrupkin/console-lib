@@ -6,10 +6,16 @@ import scala.util.Random
 // Created: 4/10/2014
 
 object Animations {
-  val flip = List(ScreenChar('\\', fg = RGBColor.LightGrey),
-    ScreenChar('|', fg = RGBColor.LightGrey),
-    ScreenChar('/', fg = RGBColor.LightGrey),
-    ScreenChar('-', fg = RGBColor.LightGrey))
+  import RGBColor._
+  val flip = List(
+//    ScreenChar('\\', fg = LightGrey),
+//    ScreenChar('|', fg = LightGrey),
+//    ScreenChar('/', fg = LightGrey),
+//    ScreenChar('-', fg = LightGrey))
+    ScreenChar('\\', fg = LightGrey),
+    ScreenChar('\u2502', fg = LightGrey),
+    ScreenChar('/', fg = LightGrey),
+    ScreenChar('\u2500', fg = LightGrey))
 }
 
 trait TileAnime {

@@ -11,9 +11,9 @@ import model.World
 /**
  * Created by mtrupkin on 3/8/14.
  */
-class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL) {
+class MainWindow(size: Size, world: World) extends Composite("MainWindow", LayoutFlow.VERTICAL) {
   var time = 0
-  var world = new World()
+
   layout = Layout(right = GRAB, bottom = GRAB)
 
   val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE_SANS_BOTTOM)
@@ -62,25 +62,4 @@ class MainWindow(size: Size) extends Composite("MainWindow", LayoutFlow.VERTICAL
   addControl(bottomPanel)
 
   arrange(size)
-
-  override def keyPressed(key: ConsoleKey) {
-    import scala.swing.event.Key._
-
-    val k = key.keyValue
-    k match {
-      case W | Up => world.player.move(Point.Up)
-      case A | Left => world.player.move(Point.Left)
-      case S | Down => world.player.move(Point.Down)
-      case D | Right => world.player.move(Point.Right)
-      case Enter => ???
-      case Escape => ???
-      case _ =>
-      case _ =>
-    }
-  }
-
-  override def update(elapsedTime: Int) {
-    time += elapsedTime
-    world.update(elapsedTime)
-  }
 }

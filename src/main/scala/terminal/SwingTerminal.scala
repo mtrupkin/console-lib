@@ -24,21 +24,14 @@ trait Terminal {
   var mouse: Point = Point.Origin
 
   def addMouseAdapter(mouseAdapter: MouseAdapter)
-  def flush(screen: Screen)
+  def render(screen: Screen)
   def close()
 }
 
 
 class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: String = "Swing Terminal") extends Frame with Terminal {
   val terminalCanvas = new TerminalCanvas(terminalSize)
-  //val normalTextFont = new Font("Courier New", Font.PLAIN, 14)
-  //val normalTextFont = new Font("Monospaced", Font.PLAIN, 14)
   val normalTextFont = new Font("Consolas", Font.PLAIN, 18)
-  //val normalTextFont = normalTextFont1.deriveFont(15.5f)
-  //val normalTextFont = new Font("Lucida Console", Font.PLAIN, 14)
-  //val normalTextFont = new Font("Lucida Sans Typewriter", Font.PLAIN, 14)
-
-
   val systemFont = new Font("Arial", Font.PLAIN, 10)
 
   peer.add(terminalCanvas)
@@ -110,9 +103,9 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
   //val charSize = Size(1, 1)
 
 
-  def flush(screen: Screen) {
+  def render(screen: Screen) {
     if (!closed) {
-      terminalCanvas.flush(screen)
+      terminalCanvas.render(screen)
     }
   }
 
@@ -163,28 +156,21 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
     var lastPaintTime = System.currentTimeMillis()
     var frameCount = 0
 
-    def flush(screen: Screen) = {
+    def render(screen: Screen) = {
 
-      val buffer = getBufferStrategy
-      val g2 = getGraphics2D(buffer)
+      val bufferStrategy = getBufferStrategy
+      val g2 = getGraphics2D(bufferStrategy)
 
-      render(screen, g2)
+      renderGraphics(screen, g2)
 
-      if (!buffer.contentsLost()) {
-        buffer.show()
+      if (!bufferStrategy.contentsLost()) {
+        bufferStrategy.show()
       }
 
       g2.dispose()
     }
 
-    def flushSingleBuffer(screen: Screen) = {
-      val g2 = getGraphics2D(getGraphics())
-      render(screen, g2)
-
-      g2.dispose()
-    }
-
-    def render(screen: Screen, g2: Graphics2D) = {
+    def renderGraphics(screen: Screen, g2: Graphics2D) = {
       this.synchronized {
         g2.setFont(normalTextFont)
 

@@ -44,7 +44,7 @@ class World extends TileMap {
   //def wipe() {
     size.foreach((x, y) => {
       tiles(x)(y) match {
-        case floor:FloorTile => floor.flipOn(y*1000 + 1000)
+        case floor:FloorTile => floor.flipOn(y*100)
         case _ =>
       }
     })
@@ -57,7 +57,7 @@ trait Tile {
 }
 
 object Tile {
-  val Floor = ScreenChar('.', fg = RGBColor.LightGrey)
+  val Floor = ScreenChar(' ', fg = RGBColor.LightGrey)
 }
 
 class FloorTile extends Tile {
@@ -69,7 +69,7 @@ class FloorTile extends Tile {
   }
 
   def flipOn(delay: Int) {
-    val a = new TempAnime(anim, new FrameAnime(Animations.flip, 250), 1000)
+    val a = new TempAnime(anim, new FrameAnime(Animations.flip, 25), 100)
 
     anim = new DelayedAnime(anim, a, delay)
   }
