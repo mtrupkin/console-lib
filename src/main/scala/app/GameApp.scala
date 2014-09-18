@@ -7,41 +7,21 @@ package org.flagship.console.app
 
 
 import org.flagship.console.terminal.SwingTerminal
-import org.flagship.console.{Point, Size}
-import org.flagship.game.{GameEngine, Game}
-import org.flagship.console.screen.{ConsoleKey, Screen}
+import org.flagship.console.Size
+import org.flagship.game.GameEngine
 import model.World
+import app.GameController
 
 
 // TODO: fix right grab for vertical layout
-object GameApp extends App with GameEngine {
+object GameApp extends App {
   val size = Size(120, 42)
-  val screen = Screen(size)
+
   val terminal = new SwingTerminal(size, "App")
   val world = new World()
-  val window = new MainWindow(size, world)
+  val controller = new GameController(world)
 
-  gameLoop()
+  val engine = new GameEngine(size, terminal, controller)
 
-  override def update() = {
-    world.update(100)
-  }
-
-  override def render(screen: Screen) = window.render(screen)
-
-  def keyPressed(key: ConsoleKey) {
-    import scala.swing.event.Key._
-
-    val k = key.keyValue
-    k match {
-      case W | Up => world.player.move(Point.Up)
-      case A | Left => world.player.move(Point.Left)
-      case S | Down => world.player.move(Point.Down)
-      case D | Right => world.player.move(Point.Right)
-      case Enter => ???
-      case Escape => ???
-      case _ =>
-      case _ =>
-    }
-  }
+  engine.gameLoop()
 }
