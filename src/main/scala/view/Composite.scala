@@ -38,10 +38,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
 
     val elementScreen = Screen(elementSize)
 
-    val tmp = name
-
     controls.foreach(c => {
-      val n = name
       val controlScreen = Screen(c.dimension)
       c.render(controlScreen)
       elementScreen.display(c.position, controlScreen)
@@ -73,13 +70,18 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
     //layoutManager.snap(dimension, controls)
     var remaining: Size = Size(dimension.width, dimension.height).subtract(border.borderSize)
     if (layoutFlow == HORIZONTAL) {
-
+      if (border.dividers) {
+        remaining = remaining.copy(width = remaining.width - Math.max(0, controls.length-1))
+      }
       for (c <- controls.reverse) {
         c.snap(remaining)
         remaining = Size(remaining.width - c.dimension.width, remaining.height)
       }
     } else if (layoutFlow ==  VERTICAL) {
       var remaining: Size = Size(size.width, size.height)
+      if (border.dividers) {
+        remaining = remaining.copy(height = remaining.height - Math.max(0, controls.length-1))
+      }
       for (c <- controls.reverse) {
         c.snap(remaining)
         remaining = Size(remaining.width, remaining.height - c.dimension.height)
@@ -93,11 +95,17 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
     var remaining: Size = Size(dimension.width, dimension.height).subtract(border.borderSize)
 
     if (layoutFlow == HORIZONTAL) {
+      if (border.dividers) {
+        remaining = remaining.copy(width = remaining.width - Math.max(0, controls.length-1))
+      }
       for(c <- controls.reverse) {
         c.grab(remaining)
         remaining = Size(remaining.width - c.dimension.width, remaining.height)
       }
     } else if (layoutFlow == VERTICAL) {
+      if (border.dividers) {
+        remaining = remaining.copy(height = remaining.height - Math.max(0, controls.length-1))
+      }
       for(c <- controls.reverse) {
         c.grab(remaining)
         remaining = Size(remaining.width, remaining.height - c.dimension.height)
