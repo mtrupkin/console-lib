@@ -12,6 +12,11 @@ case class Size(width: Int, height: Int) {
   def foreach(f: (Int, Int) => Unit) = for ( x <- 0 until width; y <- 0 until height ) f(x, y)
 }
 
+object Size {
+  val ZERO = new Size(0, 0)
+  val ONE = new Size(1, 1)
+}
+
 object SizeImplicits {
   implicit def TupleToSize(t: (Int, Int)) = Size(t._1, t._2)
   implicit def SizeToTuple(s: Size) = (s.width, s.height)

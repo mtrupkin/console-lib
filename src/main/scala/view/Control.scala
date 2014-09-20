@@ -9,8 +9,8 @@ import org.flagship.console.screen._
  * Date: 7/6/13
  */
 trait Control {
-  def minSize: Size = Size(1, 1)
-  var dimension: Size = minSize
+  def minSize: Size //= Size.ONE
+  var dimension: Size = Size.ONE
 
   var position = Point.Origin
   var layout: Layout = Layout.NONE
