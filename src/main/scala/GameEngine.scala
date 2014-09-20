@@ -18,8 +18,10 @@ class GameEngine(size: Size, terminal: Terminal, controller: Controller) {
   def completed(): Boolean = terminal.closed
 
   def render() {
-    controller.render(screen)
-    terminal.render(screen)
+    if (!completed()) {
+      controller.render(screen)
+      terminal.render(screen)
+    }
   }
 
   def processInput() {
