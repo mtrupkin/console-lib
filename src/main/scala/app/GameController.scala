@@ -16,10 +16,10 @@ class GameController(world: World) extends Controller {
   val mainWindow = new Composite("MainWindow", LayoutFlow.VERTICAL)
   mainWindow.layout = Layout(right = GRAB, bottom = GRAB)
 
-  val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE_SANS_BOTTOM)
+  val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = Border.SINGLE)
   topPanel.layout = Layout(right = GRAB, bottom = NONE)
 
-  val bottomPanel = new Composite(name = "bottomPanel", border = Border.SINGLE_TEE_TOP)
+  val bottomPanel = new Composite(name = "bottomPanel", border = Border.SINGLE_SANS_TOP)
   bottomPanel.layout = Layout(right = GRAB, bottom = GRAB)
 
   val mainPanel = new Composite(name = "mainPanel", border = Border.NONE)
@@ -28,9 +28,9 @@ class GameController(world: World) extends Controller {
   val mapPanel = new MapWidget(world)
   mainPanel.addControl(mapPanel)
 
-  val detailBorder = new Border(box = Box.SINGLE_TEE_LEFT, BorderSides(right = false, top = false, bottom = false))
+  val detailBorder = new Border(box = Box.SINGLE_TEE_LEFT, sides = BorderSides(right = false, top = false, bottom = false))
 
-  val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.VERTICAL, border = detailBorder)
+  val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.VERTICAL)
   detailPanel.layout = Layout(right = GRAB, bottom = GRAB)
 
   val label1 = new Control {

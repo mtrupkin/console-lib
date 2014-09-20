@@ -51,11 +51,12 @@ object Border {
   val DOUBLE = new Border(Box.DOUBLE)
   val NONE = new Border(sides = BorderSides.NONE)
 
+  val SINGLE_SANS_TOP = new Border(sides = BorderSides.SANS_TOP)
   val SINGLE_SANS_BOTTOM = new Border(sides = BorderSides.SANS_BOTTOM)
   val SINGLE_TEE_TOP = new Border(box = Box.SINGLE_TEE_TOP)
 }
 
-class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL) {
+class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL, val dividers: Boolean = false) {
   def borderSize: Size = {
     var width = 0
     var height = 0
