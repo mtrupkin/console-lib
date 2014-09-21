@@ -70,17 +70,29 @@ class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL
     Size(width, height)
   }
 
-  def borderOffset: Point = {
-    var x = 0
-    var y = 0
+  def dividerSize: Size = {
+    if (dividers) {
+      Size(1, 0)
+    } else Size.ZERO
+  }
 
-    if (sides.left) x += 1
-    if (sides.top) y += 1
+  def borderOffset: Point = {
+    val x = if (sides.left) 1 else 0
+    val y = if (sides.top) 1 else 0
 
     Point(x, y)
   }
 
-  def renderBorder(size: Size, screen: Screen, elementScreen: Screen) {
+  def renderVerticalDivider(screen: Screen, control: Control) {
+    import screen.write
+
+    for (yy <- 0 until control.dimension.height) {
+      write(control.position.x + control.dimension.width, control.position.y + yy, box.right)
+    }
+
+  }
+
+  def renderBorder(size: Size, screen: Screen) {
     import screen.write
     import size.{width, height}
 
@@ -98,9 +110,6 @@ class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL
 
     if (sides.bottom && sides.left) write(0, height - 1, box.bottomLeft)
     if (sides.bottom && sides.right) write(width - 1, height - 1, box.bottomRight)
-
-
-    screen.display(borderOffset, elementScreen)
   }
 }
 
