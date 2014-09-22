@@ -12,6 +12,7 @@ object ASCII {
   val LRCORNER: Char = 0x2518
   val HLINE: Char = 0x2500
   val VLINE: Char = 0x2502
+
   val FACE_WHITE: Char = 0x263A
   val FACE_BLACK: Char = 0x263B
   val HEART: Char = 0x2665

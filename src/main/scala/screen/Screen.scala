@@ -7,74 +7,63 @@ import org.flagship.console.screen.RGBColor._
  * User: mtrupkin
  * Date: 7/5/13
  */
-class Screen(size: Size) {
-  def width: Int = size.width
-  def height: Int = size.height
 
+trait Screen {
+  val size: Size
   var fg = White
   var bg = Black
-  var cursor = Point.Origin
+
+  def apply(x: Int, y: Int): ScreenChar
+  def update(x: Int, y: Int, sc: ScreenChar )
+
+  def clear() = foreach((x, y, s) => this(x, y) = ScreenChar.Blank)
+  def foreach(f: (Int, Int, ScreenChar) => Unit ): Unit = {
+    for (
+      i <- 0 until size.width;
+      j <- 0 until size.height
+    ) f(i, j, this(i, j))
+  }
+
+  def write(x: Int, y: Int, c: Char): Unit = {
+    this(x, y) = ScreenChar(c, fg, bg)
+  }
+  def write(s: String): Unit = write(0, 0, s)
+
+  def subScreen(origin: Point, size: Size): Screen = new SubScreen(origin, size, this)
+
+  private def write(x: Int, y: Int, s: String): Unit = {
+    var pos = x
+    s.foreach( c => { write(pos, y, c); pos += 1 } )
+  }
+}
+
+class SubScreen(val origin: Point, val size: Size, val screen: Screen) extends Screen {
+  def update(x: Int, y: Int, sc: ScreenChar) = {
+    screen.update(origin.x + x, origin.y + y, sc)
+  }
+
+  def apply(x: Int, y: Int): ScreenChar = {
+    screen(origin.x + x, origin.y + y)
+  }
+}
+
+object Screen {
+  def apply(size: Size):Screen = new RootScreen(size)
+}
+
+class RootScreen(val size: Size) extends Screen {
   val buffer = Array.ofDim[ScreenChar](size.width, size.height)
-
   clear()
-
-  def clear() = foreach((p, s) => this(p) = ScreenChar.Blank)
 
   def apply(x: Int, y: Int): ScreenChar = {
     buffer(x)(y)
   }
 
-  def apply(p: Point): ScreenChar = {
-    this(p.x, p.y)
-  }
-
   def update(x: Int, y: Int, sc: ScreenChar ) {
     buffer(x)(y) = sc
   }
-
-  def update(p: Point, sc: ScreenChar) {
-    update(p.x, p.y, sc)
-  }
-
-  def foreach(f: (Point, ScreenChar) => Unit ) {
-    for (
-      i <- 0 until size.width;
-      j <- 0 until size.height
-    ) f(Point(i, j), this(i, j))
-  }
-
-  def move(x: Int, y: Int) {
-    cursor = Point(x, y)
-  }
-
-  def write(c: Char) {
-    this(cursor.x, cursor.y) = ScreenChar(c, fg, bg)
-  }
-
-  def write(x: Int, y: Int, c: Char) {
-    this(x, y) = ScreenChar(c, fg, bg)
-  }
-
-  def write(x: Int, y: Int, c: Char, fg0: RGBColor, bg0: RGBColor) {
-    this(x, y) = ScreenChar(c, fg0, bg0)
-  }
-
-  def write(s: String) {
-    write(0, 0, s)
-  }
-
-  def write(x: Int, y: Int, s: String) {
-    var pos = x
-    s.foreach( c => { write(pos, y, c); pos += 1 } )
-  }
-
-  def display(x: Int, y: Int, screen: Screen): Unit = display(Point(x, y), screen)
-  def display(p: Point, screen: Screen): Unit = screen.foreach((p0, s) => this(p + p0) = s)
 }
 
-object Screen {
-  def apply(size: Size) = new Screen(size)
-}
 
 case class ScreenChar(c: Char, fg: RGBColor = White, bg: RGBColor = Black)
 

@@ -86,6 +86,8 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   override def close() {
     super.close()
+    closed = true
+    visible = false
     dispose()
   }
 
@@ -185,19 +187,19 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
         screen.foreach(drawScreenCharacter)
 
-        def drawScreenCharacter(p: Point, s: ScreenChar) {
+        def drawScreenCharacter(x: Int, y: Int, s: ScreenChar) {
 
           g2.setColor(toAwtColor(s.fg))
-          drawString(p, s.c.toString)
+          drawString(x, y, s.c.toString)
         }
 
-        def drawString(p: Point, s: String) {
-          val p2 = toPixel(p)
-          g2.drawString(s, p2.x, p2.y)
+        def drawString(x: Int, y: Int, s: String) {
+          val (x1, y1) = toPixel(x, y)
+          g2.drawString(s, x1, y1)
         }
 
-        def toPixel(p: Point): Point = {
-          Point(p.x * charDim.width, ((p.y+1) * charDim.height) - 4)
+        def toPixel(x: Int, y: Int): (Int, Int) = {
+          (x * charDim.width, ((y+1) * charDim.height) - 4)
         }
 
         val currentTime = System.currentTimeMillis()
@@ -210,9 +212,9 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 //        drawString(frameCount.toString, 1, 2)
 
         g2.setFont(systemFont)
-        val p1 = toPixel(Point(90, 35))
+        val p1 = toPixel(90, 35)
         //g2.drawString(frameRate.toString, p1.x, p1.y)
-        val p2 = toPixel(Point(90, 36))
+        val p2 = toPixel(90, 36)
         //g2.drawString(frameCount.toString, p2.x, p2.y)
 
       }

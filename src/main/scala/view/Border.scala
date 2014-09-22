@@ -10,6 +10,13 @@ case class Box(
   left: Char, right: Char,
   bottomLeft: Char, bottom: Char, bottomRight: Char)
 
+case class Divider(double: Boolean)
+
+object Divider {
+  val SINGLE = Some(Divider(false))
+  val DOUBLE = Some(Divider(true))
+}
+
 object Box {
   val SINGLE = Box(
     ASCII.ULCORNER, ASCII.HLINE, ASCII.URCORNER,
@@ -56,7 +63,7 @@ object Border {
   val SINGLE_TEE_TOP = new Border(box = Box.SINGLE_TEE_TOP)
 }
 
-class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL, val dividers: Boolean = false) {
+class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL, val divider: Option[Divider] = None) {
   def borderSize: Size = {
     var width = 0
     var height = 0
@@ -71,9 +78,10 @@ class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL
   }
 
   def dividerSize: Size = {
-    if (dividers) {
-      Size(1, 0)
-    } else Size.ZERO
+    divider match {
+      case Some(d) => Size(1, 0)
+      case None => Size.ZERO
+    }
   }
 
   def borderOffset: Point = {
@@ -86,8 +94,8 @@ class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL
   def renderVerticalDivider(screen: Screen, control: Control) {
     import screen.write
 
-    for (yy <- 0 until control.dimension.height) {
-      write(control.position.x + control.dimension.width, control.position.y + yy, box.right)
+    for (yy <- 0 until control.dimension.height+2) {
+      write(control.position.x + control.dimension.width, control.position.y + yy-1, box.right)
     }
 
   }

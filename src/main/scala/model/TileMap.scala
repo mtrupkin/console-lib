@@ -10,16 +10,17 @@ import scala.Array._
 trait TileMap {
   val size: Size
   def apply(p: Point): ScreenChar
+  def apply(x: Int, y: Int): ScreenChar
 
   def move(x: Int, y: Int): Boolean
 
-  def foreach(f: (Point, ScreenChar) => Unit ) {
+  def foreach(f: (Int, Int, ScreenChar) => Unit ) {
     for (
       i <- 0 until size.width;
       j <- 0 until size.height
     ) {
       val p = Point(i, j)
-      f(p, this(p))
+      f(i, j, this(i, j))
     }
   }
 }
@@ -33,6 +34,9 @@ class World extends TileMap {
 
   def apply(p: Point): ScreenChar = {
     if (player.position == p) player.sc else tiles(p.x)(p.y).sc
+  }
+  def apply(x: Int, y: Int): ScreenChar = {
+    if (player.position == Point(x,y)) player.sc else tiles(x)(y).sc
   }
 
   def move(x: Int, y: Int): Boolean = ???

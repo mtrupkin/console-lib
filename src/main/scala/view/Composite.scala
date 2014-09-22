@@ -47,27 +47,22 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
   }
 
   def render(screen: Screen) {
-
-    val elementScreen = Screen(elementSize)
+    border.renderBorder(dimension, screen)
+    val elementScreen = screen.subScreen(border.borderOffset, elementSize)
 
     if (controls.length>0) {
       for (c <- controls.init) {
-        val controlScreen = Screen(c.dimension)
+        val controlScreen = elementScreen.subScreen(c.position, c.dimension)
         c.render(controlScreen)
-        elementScreen.display(c.position, controlScreen)
 
-        if (border.dividers) {
-          border.renderVerticalDivider(screen, c)
+        for(d <- border.divider) {
+          border.renderVerticalDivider(elementScreen, c)
         }
       }
 
       val c = controls.last
-      val controlScreen = Screen(c.dimension)
+      val controlScreen = elementScreen.subScreen(c.position, c.dimension)
       c.render(controlScreen)
-      elementScreen.display(c.position, controlScreen)
-
-      border.renderBorder(dimension, screen)
-      screen.display(border.borderOffset, elementScreen)
     }
   }
 
@@ -118,7 +113,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
         remaining = Size(remaining.width - c.dimension.width, remaining.height)
       }
     } else if (layoutFlow == VERTICAL) {
-      if (border.dividers) {
+      for (d <- border.divider) {
         remaining = remaining.copy(height = remaining.height - Math.max(0, controls.length-1))
       }
       for(c <- controls.reverse) {
@@ -143,7 +138,10 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
   }
 
   def hFlow(controls: List[Control]) {
-    val dividerWidth = if (border.dividers) 1 else 0
+    val dividerWidth = border.divider match {
+      case Some(d) => 1
+      case None => 0
+    } 
 
     var lastPos = Point.Origin
     for (c <- controls) {

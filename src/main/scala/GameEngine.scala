@@ -13,7 +13,7 @@ import org.flagship.console.Size
 class GameEngine(size: Size, terminal: Terminal, controller: Controller) {
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
-  val screen = new Screen(size)
+  val screen = Screen(size)
 
   def completed(): Boolean = terminal.closed
 

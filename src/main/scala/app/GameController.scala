@@ -16,7 +16,7 @@ class GameController(world: World) extends Controller {
   val mainWindow = new Composite("MainWindow", LayoutFlow.VERTICAL)
   mainWindow.layout = Layout(right = GRAB, bottom = GRAB)
 
-  val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = new Border(dividers = true))//border = Border.SINGLE)
+  val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = new Border(sides = BorderSides.SANS_BOTTOM, divider = Divider.SINGLE))//border = Border.SINGLE)
   topPanel.layout = Layout(right = GRAB, bottom = NONE)
 
   val bottomPanel = new Composite(name = "bottomPanel", border = Border.SINGLE_SANS_TOP)
