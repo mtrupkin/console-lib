@@ -5,39 +5,117 @@ import org.flagship.console.{Point, Size}
 
 // Created: 4/4/2014
 
+case class BoxSide(side: Int)
+
+object BoxSide {
+  val TOP_LEFT = BoxSide(0)
+  val TOP = BoxSide(1)
+  val TOP_RIGHT = BoxSide(2)
+  val RIGHT = BoxSide(3)
+  val BOTTOM_RIGHT = BoxSide(4)
+  val BOTTOM = BoxSide(5)
+  val BOTTOM_LEFT = BoxSide(6)
+  val LEFT = BoxSide(7)
+}
+
 case class Box(
   topLeft: Char, top: Char, topRight: Char,
   left: Char, right: Char,
   bottomLeft: Char, bottom: Char, bottomRight: Char)
 
-case class Divider(double: Boolean)
+case class Divider(single: Boolean)
 
 object Divider {
-  val SINGLE = Some(Divider(false))
-  val DOUBLE = Some(Divider(true))
+  val SINGLE = Some(Divider(true))
+  val DOUBLE = Some(Divider(false))
 }
 
 object Box {
+  import ASCII._
+
+  def side(box:Box, side: BoxSide): Char = {
+    side match {
+      case BoxSide.TOP_LEFT => box.topLeft
+      case BoxSide.TOP => box.top
+      case BoxSide.TOP_RIGHT => ULCORNER
+      case BoxSide.RIGHT => ULCORNER
+      case BoxSide.BOTTOM => ULCORNER
+      case BoxSide.BOTTOM => ULCORNER
+      case BoxSide.BOTTOM_LEFT => ULCORNER
+      case BoxSide.LEFT => ULCORNER
+    }
+  }
+
   val SINGLE = Box(
-    ASCII.ULCORNER, ASCII.HLINE, ASCII.URCORNER,
-    ASCII.VLINE, ASCII.VLINE,
-    ASCII.LLCORNER, ASCII.HLINE, ASCII.LRCORNER)
+    ULCORNER, HLINE, URCORNER,
+    VLINE, VLINE,
+    LLCORNER, HLINE, LRCORNER)
 
   val DOUBLE = Box(
-    ASCII.DOUBLE_LINE_UP_LEFT_CORNER, ASCII.DOUBLE_LINE_HORIZONTAL, ASCII.DOUBLE_LINE_UP_RIGHT_CORNER,
-    ASCII.DOUBLE_LINE_VERTICAL, ASCII.DOUBLE_LINE_VERTICAL,
-    ASCII.DOUBLE_LINE_LOW_LEFT_CORNER, ASCII.DOUBLE_LINE_HORIZONTAL, ASCII.DOUBLE_LINE_LOW_RIGHT_CORNER)
-
+    DOUBLE_ULCORNER, DOUBLE_HLINE, DOUBLE_URCORNER,
+    DOUBLE_VLINE, DOUBLE_VLINE,
+    DOUBLE_LLCORNER, DOUBLE_HLINE, DOUBLE_LRCORNER)
 
   val SINGLE_TEE_TOP = Box(
-    ASCII.SINGLE_LINE_T_RIGHT, ASCII.HLINE, ASCII.SINGLE_LINE_T_LEFT,
-    ASCII.VLINE, ASCII.VLINE,
-    ASCII.LLCORNER, ASCII.HLINE, ASCII.LRCORNER)
+    SINGLE_LINE_T_RIGHT, HLINE, SINGLE_LINE_T_LEFT,
+    VLINE, VLINE,
+    LLCORNER, HLINE, LRCORNER)
 
   val SINGLE_TEE_LEFT = Box(
-    ASCII.SINGLE_LINE_T_LEFT, ASCII.HLINE, ASCII.URCORNER,
-    ASCII.VLINE, ASCII.VLINE,
-    ASCII.SINGLE_LINE_T_LEFT, ASCII.HLINE, ASCII.LRCORNER)
+    SINGLE_LINE_T_LEFT, HLINE, URCORNER,
+    VLINE, VLINE,
+    SINGLE_LINE_T_LEFT, HLINE, LRCORNER)
+
+  val SINGLE_TEE_BOTTOM = Box(
+    ULCORNER, HLINE, URCORNER,
+    VLINE, VLINE,
+    SINGLE_LINE_T_RIGHT, HLINE, SINGLE_LINE_T_LEFT)
+
+  def getTee(single: Boolean, boxSide: BoxSide, box: Box): Char = {
+    if (single) getSingleTee(boxSide, box) else getDoubleTee(boxSide, box)
+  }
+
+  def getSingleTee(boxSide: BoxSide, box: Box): Char = {
+    boxSide match {
+      case BoxSide.TOP => box.top match {
+        case HLINE => SINGLE_LINE_T_DOWN
+        case DOUBLE_HLINE => DOUBLE_LINE_T_SINGLE_DOWN
+      }
+      case BoxSide.BOTTOM => box.bottom match {
+        case HLINE => SINGLE_LINE_T_UP
+        case DOUBLE_HLINE => DOUBLE_LINE_T_SINGLE_UP
+      }
+      case BoxSide.LEFT => box.left match {
+        case VLINE => SINGLE_LINE_T_DOUBLE_RIGHT
+        case DOUBLE_VLINE => DOUBLE_LINE_T_RIGHT
+      }
+      case BoxSide.RIGHT => box.right match {
+        case HLINE => SINGLE_LINE_T_DOUBLE_LEFT
+        case DOUBLE_HLINE => DOUBLE_LINE_T_LEFT
+      }
+    }
+  }
+
+  def getDoubleTee(boxSide: BoxSide, box: Box): Char = {
+    boxSide match {
+      case BoxSide.TOP => box.top match {
+        case HLINE => SINGLE_LINE_T_DOUBLE_DOWN
+        case DOUBLE_HLINE => DOUBLE_LINE_T_DOWN
+      }
+      case BoxSide.BOTTOM => box.bottom match {
+        case HLINE => SINGLE_LINE_T_DOUBLE_UP
+        case DOUBLE_HLINE => DOUBLE_LINE_T_UP
+      }
+      case BoxSide.LEFT => box.left match {
+        case VLINE => SINGLE_LINE_T_DOUBLE_RIGHT
+        case DOUBLE_VLINE => DOUBLE_LINE_T_RIGHT
+      }
+      case BoxSide.RIGHT => box.right match {
+        case HLINE => SINGLE_LINE_T_DOUBLE_LEFT
+        case DOUBLE_HLINE => DOUBLE_LINE_T_LEFT
+      }
+    }
+  }
 }
 
 case class BorderSides(left: Boolean = true, right: Boolean = true, top: Boolean = true, bottom: Boolean = true)
@@ -61,6 +139,7 @@ object Border {
   val SINGLE_SANS_TOP = new Border(sides = BorderSides.SANS_TOP)
   val SINGLE_SANS_BOTTOM = new Border(sides = BorderSides.SANS_BOTTOM)
   val SINGLE_TEE_TOP = new Border(box = Box.SINGLE_TEE_TOP)
+  val SINGLE_TEE_BOTTOM = new Border(box = Box.SINGLE_TEE_BOTTOM)
 }
 
 class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL, val divider: Option[Divider] = None) {
@@ -92,12 +171,26 @@ class Border(val box: Box = Box.SINGLE, val sides: BorderSides = BorderSides.ALL
   }
 
   def renderVerticalDivider(screen: Screen, control: Control) {
-    import screen.write
+    for( d <- divider ) {
+      import screen.write
+      import control._
 
-    for (yy <- 0 until control.dimension.height+2) {
-      write(control.position.x + control.dimension.width, control.position.y + yy-1, box.right)
+      val divider = if (d.single) ASCII.VLINE else ASCII.DOUBLE_VLINE
+
+      for (yy <- 0 until dimension.height) {
+        write(position.x + dimension.width, position.y + yy, divider)
+      }
+
+      if (sides.top) {
+        val top = Box.getTee(d.single, BoxSide.TOP, this.box)
+        write(position.x + dimension.width, position.y - 1, top)
+      }
+
+      if (sides.bottom) {
+        val bottom = Box.getTee(d.single, BoxSide.BOTTOM, this.box)
+        write(position.x + dimension.width, position.y + dimension.height, bottom)
+      }
     }
-
   }
 
   def renderBorder(size: Size, screen: Screen) {
