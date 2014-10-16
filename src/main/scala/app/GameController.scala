@@ -11,6 +11,7 @@ import org.flagship.game.Controller
 // Created: 9/18/2014
 
 class GameController(world: World) extends Controller {
+
   val size = Size(120, 42)
 
   val mainWindow = new Composite("MainWindow", LayoutFlow.VERTICAL)
@@ -26,7 +27,11 @@ class GameController(world: World) extends Controller {
   val mainPanel = new Composite(name = "mainPanel")
   mainPanel.layout = Layout(right = NONE, bottom = NONE)
 
-  val mapPanel = new MapWidget(world)
+  val mapPanel = new MapWidget(world) {
+    def onSelection = {
+
+    }
+  }
   mainPanel.addControl(mapPanel)
 
   val detailBorder = new Border(box = Box.DOUBLE, sides = BorderSides(right = false, top = false, bottom = false))
@@ -36,7 +41,7 @@ class GameController(world: World) extends Controller {
   val label1 = new Control {
     override def minSize = Size(20, 1)
     override def render(screen: Screen): Unit = {
-      screen.write("label 1")
+      screen.write(s"${world.time}")
     }
   }
   val label2 = new Control {
@@ -72,6 +77,8 @@ class GameController(world: World) extends Controller {
   }
 
   def keyPressed(key: ConsoleKey) {
+    mainWindow.keyPressed(key)
+
     import scala.swing.event.Key._
 
     val k = key.keyValue
