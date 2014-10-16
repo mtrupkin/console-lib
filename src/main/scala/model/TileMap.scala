@@ -26,6 +26,7 @@ trait TileMap {
 }
 
 class World extends TileMap {
+  var time = 0;
   val size = Size(60, 30)
   val tiles = ofDim[Tile](size.width, size.height)
   val player: Player = new Player("player", Point(0,0), ScreenChar('@'))
@@ -42,6 +43,7 @@ class World extends TileMap {
   def move(x: Int, y: Int): Boolean = ???
 
   def update(elapsed: Int) {
+    time += elapsed
     size.foreach((x, y) => tiles(x)(y).update(elapsed))
   }
 
