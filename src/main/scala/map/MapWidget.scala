@@ -7,9 +7,11 @@ import org.flagship.console.screen.Screen
 /**
  * Created by mtrupkin on 4/6/2014.
  */
-class MapWidget(val map: TileMap) extends Control {
+abstract class MapWidget(val map: TileMap) extends Control {
   override def minSize = map.size
   override def render(screen: Screen) {
     map.foreach((x, y, s) => screen(x, y) = s)
   }
+
+  def onSelection
 }
