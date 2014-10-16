@@ -10,7 +10,7 @@ import org.flagship.console.Size
  * User: mtrupkin
  * Date: 7/5/13
  */
-class GameEngine(size: Size, terminal: Terminal, controller: Controller) {
+class GameEngine(size: Size, terminal: Terminal, var controller: Controller) {
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
   val screen = Screen(size)
