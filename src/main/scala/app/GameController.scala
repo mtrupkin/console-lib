@@ -6,7 +6,10 @@ import map.MapWidget
 import org.flagship.console.{Point, Size}
 import org.flagship.console.screen.{ConsoleKey, Screen}
 import model.World
-import org.flagship.game.Controller
+import org.flagship.game.{GameEngine, Controller}
+import state.StateMachine
+
+import scala.util.Random
 
 // Created: 9/18/2014
 
@@ -38,6 +41,7 @@ class GameController(world: World) extends Controller {
   val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.VERTICAL)
   detailPanel.layout = Layout(right = GRAB, bottom = GRAB)
 
+
   val label1 = new Control {
     override def minSize = Size(20, 1)
     override def render(screen: Screen): Unit = {
@@ -68,13 +72,20 @@ class GameController(world: World) extends Controller {
 
   mainWindow.arrange(size)
 
-  def update(elapsed: Int) {
+  override def update(machine: GameEngine, elapsed: Int) {
     world.update(elapsed)
+
+    if (endGame) {
+      machine.changeState(new IntroController)
+    }
   }
 
   def render(screen: Screen) {
     mainWindow.render(screen)
   }
+
+  //
+  var endGame = false
 
   def keyPressed(key: ConsoleKey) {
     mainWindow.keyPressed(key)
@@ -88,7 +99,7 @@ class GameController(world: World) extends Controller {
       case S | Down => world.player.move(Point.Down)
       case D | Right => world.player.move(Point.Right)
       case Enter => ???
-      case Escape => ???
+      case Escape => endGame = true
       case _ =>
       case _ =>
     }

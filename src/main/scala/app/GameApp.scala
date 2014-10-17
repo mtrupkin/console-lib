@@ -10,7 +10,7 @@ import org.flagship.console.terminal.SwingTerminal
 import org.flagship.console.Size
 import org.flagship.game.GameEngine
 import model.World
-import app.GameController
+import app.{IntroController, GameController}
 
 
 // TODO: fix right grab for vertical layout
@@ -18,10 +18,10 @@ object GameApp extends App {
   val size = Size(120, 42)
 
   val terminal = new SwingTerminal(size, "App")
-  val world = new World()
-  val controller = new GameController(world)
+  //val world = new World()
+  //val controller = new GameController(world)
 
-  val engine = new GameEngine(size, terminal, controller)
+  val engine = new GameEngine(size, terminal, new IntroController)
 
   engine.gameLoop()
 }

@@ -5,28 +5,35 @@ import org.flagship.console.screen._
 import java.awt.event.{MouseEvent, MouseAdapter}
 import org.flagship.console.terminal.Terminal
 import org.flagship.console.Size
+import state.{State, StateMachine}
 
 /**
  * User: mtrupkin
  * Date: 7/5/13
  */
-class GameEngine(size: Size, terminal: Terminal, var controller: Controller) {
+class GameEngine(size: Size, terminal: Terminal, var currentState: Controller) {
+
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
   val screen = Screen(size)
 
   def completed(): Boolean = terminal.closed
 
+  def changeState(newState: Controller): Unit = {
+    screen.clear()
+    currentState = newState
+  }
+
   def render() {
     if (!completed()) {
-      controller.render(screen)
+      currentState.render(screen)
       terminal.render(screen)
     }
   }
 
   def processInput() {
     for (key <- terminal.key) {
-      controller.keyPressed(key)
+      currentState.keyPressed(key)
       terminal.key = None
     }
   }
@@ -48,7 +55,7 @@ class GameEngine(size: Size, terminal: Terminal, var controller: Controller) {
       while (accumulator >= updateRate) {
         updates += 1
         processInput
-        controller.update(updateRate.toInt)
+        currentState.update(this, updateRate.toInt)
         accumulator -= updateRate
       }
 
