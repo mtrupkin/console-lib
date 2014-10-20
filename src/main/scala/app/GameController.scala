@@ -6,14 +6,11 @@ import map.MapWidget
 import org.flagship.console.{Point, Size}
 import org.flagship.console.screen.{ConsoleKey, Screen}
 import model.World
-import org.flagship.game.{GameEngine, Controller}
-import state.StateMachine
-
-import scala.util.Random
+import org.flagship.game.{Controller, GameEngine}
 
 // Created: 9/18/2014
 
-class GameController(world: World) extends Controller {
+class GameController(val world: World) extends Controller {
 
   val size = Size(120, 42)
 
@@ -72,12 +69,12 @@ class GameController(world: World) extends Controller {
 
   mainWindow.arrange(size)
 
-  override def update(machine: GameEngine, elapsed: Int) {
+  def update(elapsed: Int) {
     world.update(elapsed)
 
-    if (endGame) {
-      machine.changeState(new IntroController)
-    }
+//    if (endGame) {
+//      machine.changeState(new IntroController)
+//    }
   }
 
   def render(screen: Screen) {

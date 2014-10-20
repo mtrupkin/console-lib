@@ -5,8 +5,7 @@ import org.flagship.console.Size
 import org.flagship.console.control.LayoutOp._
 import org.flagship.console.control.{Layout, LayoutFlow, Composite, Control}
 import org.flagship.console.screen.{ConsoleKey, Screen}
-import org.flagship.game.{GameEngine, Controller}
-import state.StateMachine
+import org.flagship.game.{Controller, GameEngine}
 
 // Created: 10/17/2014
 
@@ -28,16 +27,13 @@ class IntroController extends Controller {
   // XXX
   var newGame = false
 
-  def newGame(machine: GameEngine): Unit = {
-    val world = new World()
-    val controller = new GameController(world)
-
-    machine.changeState(controller)
-  }
-
-  override def update(machine: GameEngine, elapsed: Int): Unit = {
+  def update(elapsed: Int): Unit = {
     this.elapsed += elapsed
-    if (newGame) { newGame(machine)}
+    if (newGame) {
+      val world = new World()
+      val controller = new GameController(world)
+      changeState(controller)
+    }
   }
 
   override def keyPressed(key: ConsoleKey): Unit = {

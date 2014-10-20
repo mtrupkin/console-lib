@@ -11,20 +11,14 @@ package state
 trait StateMachine {
   type StateType <: State
 
-  trait State {
-    def update(elapsed: Int): Unit = {}
-  }
-  
   var currentState: StateType = _
 
-  def changeState(newState: StateType): Unit = {
-    currentState = newState
-  }
+  trait State {
+    def update(elapsed: Int): Unit
 
-  def changeState(newState: StateType, elapsed: Int): Unit = {
-    update(elapsed)
-    currentState = newState
-    update(elapsed)
+    def changeState(newState: StateType): Unit = {
+      currentState = newState
+    }
   }
 
   def update(elapsed: Int) = {
@@ -34,18 +28,22 @@ trait StateMachine {
 
 class ControllerStateMachine extends StateMachine {
   type StateType = ControllerState
-  
-  val controllerRelatedStuff = 3
-  
-  class ControllerState extends State {
+
+  var controllerCounter = 0
+
+  trait ControllerState extends State {
+    def update(elapsed: Int): Unit = {}
+
     def render(): Unit = {
-      controllerRelatedStuff
+      controllerCounter += 1
     }
   }
-  
-  override def update(elapsed: Int): Unit = {
 
-    currentState.render()
+  def mainLoop(): Unit = {
+    while(true) {
+      currentState.render()
+      currentState.update(100)
+    }
   }
 
   class ControllerState1 extends ControllerState {
@@ -61,5 +59,3 @@ class ControllerStateMachine extends StateMachine {
   }
 }
 
-//class EngineStateMachine(var currentState: ControllerState) extends StateMachine {
-//}

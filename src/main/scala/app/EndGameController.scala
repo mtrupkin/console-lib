@@ -11,5 +11,5 @@ class EndGameController extends Controller {
 
   override def keyPressed(key: ConsoleKey): Unit = ???
 
-  //override def update(elapsed: Int): Unit = ???
+  override def update(elapsed: Int): Unit = ???
 }
