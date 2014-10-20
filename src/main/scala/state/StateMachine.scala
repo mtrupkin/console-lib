@@ -7,43 +7,58 @@ package state
 //  def update(elapsed: Int): Unit
 //}
 
-trait State {
-  def update(machine: StateMachine, elapsed: Int): Unit = {}
-}
 
 trait StateMachine {
-  var currentState: State
+  type StateType <: State
 
-  def changeState(newState: State): Unit = {
+  trait State {
+    def update(elapsed: Int): Unit = {}
+  }
+  
+  var currentState: StateType = _
+
+  def changeState(newState: StateType): Unit = {
     currentState = newState
   }
 
-  def changeState(newState: State, elapsed: Int): Unit = {
+  def changeState(newState: StateType, elapsed: Int): Unit = {
     update(elapsed)
     currentState = newState
     update(elapsed)
   }
 
   def update(elapsed: Int) = {
-    currentState.update(this, elapsed)
+    currentState.update(elapsed)
   }
 }
 
+class ControllerStateMachine extends StateMachine {
+  type StateType = ControllerState
+  
+  val controllerRelatedStuff = 3
+  
+  class ControllerState extends State {
+    def render(): Unit = {
+      controllerRelatedStuff
+    }
+  }
+  
+  override def update(elapsed: Int): Unit = {
 
-class ControllerState extends State {
-  def render() = {}
-}
+    currentState.render()
+  }
 
-class ControllerState1 extends ControllerState {
-}
+  class ControllerState1 extends ControllerState {
+  }
 
-class ControllerState2 extends ControllerState {
-//  def update(machine: EngineStateMachine, elapsed: Int): Unit = {
-//    machine.changeState(new ControllerState1)
-//  }
-}
+  class ControllerState2 extends ControllerState {
+    //  def update(machine: EngineStateMachine, elapsed: Int): Unit = {
+    //    machine.changeState(new ControllerState1)
+    //  }
+  }
 
-class ControllerState3 extends ControllerState {
+  class ControllerState3 extends ControllerState {
+  }
 }
 
 //class EngineStateMachine(var currentState: ControllerState) extends StateMachine {
