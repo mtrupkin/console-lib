@@ -16,12 +16,15 @@ import app.{IntroController, GameController}
 // TODO: fix right grab for vertical layout
 object GameApp extends App {
   val size = Size(120, 42)
-
   val terminal = new SwingTerminal(size, "App")
   //val world = new World()
   //val controller = new GameController(world)
 
-  val engine = new GameEngine(size, terminal, new IntroController)
+  //val engine = new GameEngine(size, terminal, new IntroController)
 
-  engine.gameLoop()
+  GameEngine.gameLoop()
+}
+
+object GameEngine extends GameEngine(GameApp.size, GameApp.terminal) {
+  currentState = new IntroController
 }

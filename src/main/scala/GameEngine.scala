@@ -3,7 +3,6 @@ package org.flagship.game
 import app.IntroController
 import org.flagship.console.screen._
 
-import java.awt.event.{MouseEvent, MouseAdapter}
 import org.flagship.console.terminal.Terminal
 import org.flagship.console.Size
 import state.{StateMachine}
@@ -13,21 +12,26 @@ import state.{StateMachine}
  * Date: 7/5/13
  */
 
-trait Controller {
-  def update(elapsed: Int): Unit
-  def render(screen: Screen): Unit
-  def keyPressed(key: ConsoleKey): Unit
+class GameEngine(size: Size, terminal: Terminal) extends StateMachine {
+  type StateType = Controller
 
-  def changeState(newState: Controller): Unit = {}
-}
-
-class GameEngine(size: Size, terminal: Terminal, var currentState: Controller) {
+  trait Controller extends State {
+    def update(elapsed: Int): Unit
+    def render(screen: Screen): Unit
+    def keyPressed(key: ConsoleKey): Unit
+  }
 
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
   val screen = Screen(size)
 
   def completed(): Boolean = terminal.closed
+
+  override def update(elapsedTime: Int) {
+    if (!completed()) {
+      super.update(elapsedTime)
+    }
+  }
 
   def render() {
     if (!completed()) {

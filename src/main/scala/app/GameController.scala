@@ -1,16 +1,16 @@
 package app
 
+import org.flagship.console.app.GameEngine
 import org.flagship.console.control._
 import org.flagship.console.control.LayoutOp._
 import map.MapWidget
 import org.flagship.console.{Point, Size}
 import org.flagship.console.screen.{ConsoleKey, Screen}
 import model.World
-import org.flagship.game.{Controller, GameEngine}
 
 // Created: 9/18/2014
 
-class GameController(val world: World) extends Controller {
+class GameController(val world: World) extends GameEngine.Controller {
 
   val size = Size(120, 42)
 
@@ -72,9 +72,9 @@ class GameController(val world: World) extends Controller {
   def update(elapsed: Int) {
     world.update(elapsed)
 
-//    if (endGame) {
-//      machine.changeState(new IntroController)
-//    }
+    if (endGame) {
+      changeState(new IntroController)
+    }
   }
 
   def render(screen: Screen) {

@@ -46,6 +46,8 @@ class ControllerStateMachine extends StateMachine {
     }
   }
 
+
+
   class ControllerState1 extends ControllerState {
   }
 
@@ -59,3 +61,5 @@ class ControllerStateMachine extends StateMachine {
   }
 }
 
+object ControllerStateMachine extends ControllerStateMachine {
+}
