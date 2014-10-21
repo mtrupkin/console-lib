@@ -64,7 +64,8 @@ class GameEngine(size: Size, terminal: Terminal) extends StateMachine {
       while (accumulator >= updateRate) {
         updates += 1
         processInput
-        currentState.update(updateRate.toInt)
+        update(updateRate.toInt)
+
         accumulator -= updateRate
       }
 
