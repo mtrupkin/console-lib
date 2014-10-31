@@ -2,14 +2,14 @@ package app
 
 import model.World
 import org.flagship.console.Size
-import org.flagship.console.app.GameEngine
 import org.flagship.console.control.LayoutOp._
 import org.flagship.console.control.{Layout, LayoutFlow, Composite, Control}
 import org.flagship.console.screen.{ConsoleKey, Screen}
+import org.flagship.game.ViewStateMachine
 
 // Created: 10/17/2014
 
-class IntroController extends GameEngine.Controller {
+class IntroController extends ViewStateMachine.Controller {
 
   var elapsed = 0
   val mainWindow = new Composite("MainWindow", LayoutFlow.VERTICAL)

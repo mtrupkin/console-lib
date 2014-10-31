@@ -20,11 +20,7 @@ object GameApp extends App {
   //val world = new World()
   //val controller = new GameController(world)
 
-  //val engine = new GameEngine(size, terminal, new IntroController)
+  val engine = new GameEngine(size, terminal)
 
-  GameEngine.gameLoop()
-}
-
-object GameEngine extends GameEngine(GameApp.size, GameApp.terminal) {
-  currentState = new IntroController
+  engine.gameLoop()
 }

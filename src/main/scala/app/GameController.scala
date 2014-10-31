@@ -1,16 +1,16 @@
 package app
 
-import org.flagship.console.app.GameEngine
 import org.flagship.console.control._
 import org.flagship.console.control.LayoutOp._
 import map.MapWidget
 import org.flagship.console.{Point, Size}
 import org.flagship.console.screen.{ConsoleKey, Screen}
 import model.World
+import org.flagship.game.ViewStateMachine
 
 // Created: 9/18/2014
 
-class GameController(val world: World) extends GameEngine.Controller {
+class GameController(val world: World) extends ViewStateMachine.Controller {
 
   val size = Size(120, 42)
 

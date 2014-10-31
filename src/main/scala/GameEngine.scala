@@ -1,28 +1,44 @@
 package org.flagship.game
 
-import app.IntroController
 import org.flagship.console.screen._
 
 import org.flagship.console.terminal.Terminal
 import org.flagship.console.Size
 import state.{StateMachine}
+import app.IntroController
 
 /**
  * User: mtrupkin
  * Date: 7/5/13
  */
 
-class GameEngine(size: Size, terminal: Terminal) extends StateMachine {
+trait View {
+  def render(screen: Screen): Unit
+  def keyPressed(key: ConsoleKey): Unit
+}
+
+object ViewStateMachine extends StateMachine with View {
   type StateType = Controller
 
-  trait Controller extends State {
+  var currentState: Controller = new IntroController
+
+  trait Controller extends State with View {
     def update(elapsed: Int): Unit
-    def render(screen: Screen): Unit
-    def keyPressed(key: ConsoleKey): Unit
     def changeController(newState: Controller): Unit = {
-      changeState(newState)
+      currentState = newState
     }
   }
+
+  def render(screen: Screen): Unit = {
+    currentState.render(screen)
+  }
+
+  def keyPressed(key: ConsoleKey): Unit = {
+    currentState.keyPressed(key: ConsoleKey)
+  }
+}
+
+class GameEngine(size: Size, terminal: Terminal)  {
 
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
@@ -30,22 +46,17 @@ class GameEngine(size: Size, terminal: Terminal) extends StateMachine {
 
   def completed(): Boolean = terminal.closed
 
-  override def update(elapsedTime: Int) {
-    if (!completed()) {
-      super.update(elapsedTime)
-    }
-  }
 
   def render() {
     if (!completed()) {
-      currentState.render(screen)
+      ViewStateMachine.currentState.render(screen)
       terminal.render(screen)
     }
   }
 
   def processInput() {
     for (key <- terminal.key) {
-      currentState.keyPressed(key)
+      ViewStateMachine.currentState.keyPressed(key)
       terminal.key = None
     }
   }
@@ -67,7 +78,7 @@ class GameEngine(size: Size, terminal: Terminal) extends StateMachine {
       while (accumulator >= updateRate) {
         updates += 1
         processInput
-        update(updateRate.toInt)
+        ViewStateMachine.update(updateRate.toInt)
 
         accumulator -= updateRate
       }
