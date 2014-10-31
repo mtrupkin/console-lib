@@ -15,10 +15,10 @@ trait StateMachine {
 
   trait State {
     def update(elapsed: Int): Unit
+  }
 
-    def changeState(newState: StateType): Unit = {
-      currentState = newState
-    }
+  def changeState(newState: StateType): Unit = {
+    currentState = newState
   }
 
   def update(elapsed: Int) = {
@@ -32,7 +32,6 @@ class ControllerStateMachine extends StateMachine {
   var controllerCounter = 0
 
   trait ControllerState extends State {
-    def update(elapsed: Int): Unit = {}
 
     def render(): Unit = {
       controllerCounter += 1
@@ -45,21 +44,21 @@ class ControllerStateMachine extends StateMachine {
       currentState.update(100)
     }
   }
-
-
-
-  class ControllerState1 extends ControllerState {
-  }
-
-  class ControllerState2 extends ControllerState {
-    //  def update(machine: EngineStateMachine, elapsed: Int): Unit = {
-    //    machine.changeState(new ControllerState1)
-    //  }
-  }
-
-  class ControllerState3 extends ControllerState {
-  }
 }
 
 object ControllerStateMachine extends ControllerStateMachine {
+}
+
+class ControllerState1 extends ControllerStateMachine.ControllerState {
+  def update(elapsed: Int): Unit = {}
+}
+
+class ControllerState2 extends ControllerStateMachine.ControllerState {
+  def update(elapsed: Int): Unit = {
+    ControllerStateMachine.changeState(new ControllerState1)
+  }
+}
+
+class ControllerState3 extends ControllerStateMachine.ControllerState {
+  def update(elapsed: Int): Unit = {}
 }

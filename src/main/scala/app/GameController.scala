@@ -73,7 +73,7 @@ class GameController(val world: World) extends GameEngine.Controller {
     world.update(elapsed)
 
     if (endGame) {
-      changeState(new IntroController)
+      changeController(new IntroController)
     }
   }
 

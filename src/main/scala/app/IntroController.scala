@@ -32,7 +32,7 @@ class IntroController extends GameEngine.Controller {
     if (newGame) {
       val world = new World()
       val controller = new GameController(world)
-      changeState(controller)
+      changeController(controller)
     }
   }
 

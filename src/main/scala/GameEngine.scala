@@ -19,6 +19,9 @@ class GameEngine(size: Size, terminal: Terminal) extends StateMachine {
     def update(elapsed: Int): Unit
     def render(screen: Screen): Unit
     def keyPressed(key: ConsoleKey): Unit
+    def changeController(newState: Controller): Unit = {
+      changeState(newState)
+    }
   }
 
   val updatesPerSecond = 100
