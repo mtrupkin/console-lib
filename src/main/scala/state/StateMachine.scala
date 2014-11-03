@@ -11,14 +11,18 @@ package state
 trait StateMachine {
   type StateType <: State
 
-  def currentState: StateType
+  private var _currentState = initialState
+
+  def currentState: StateType = _currentState
+
+  def initialState: StateType
 
   trait State {
     def update(elapsed: Int): Unit
-  }
 
-  def changeState(newState: StateType): Unit = {
-    //currentState = newState
+    def changeState(newState: StateType): Unit = {
+      _currentState = newState
+    }
   }
 
   def update(elapsed: Int) = {
@@ -29,7 +33,7 @@ trait StateMachine {
 object ControllerStateMachine extends StateMachine {
   type StateType = ControllerState
 
-  var currentState = new ControllerState {
+  def initialState = new ControllerState {
     override def update(elapsed: Int): Unit = ???
   }
 
@@ -61,7 +65,7 @@ class ControllerState1 extends ControllerStateMachine.ControllerState {
 
 class ControllerState2 extends ControllerStateMachine.ControllerState {
   def update(elapsed: Int): Unit = {
-    ControllerStateMachine.changeState(new ControllerState1)
+    changeState(new ControllerState1)
   }
 }
 

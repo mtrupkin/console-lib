@@ -20,13 +20,10 @@ trait View {
 object ViewStateMachine extends StateMachine with View {
   type StateType = Controller
 
-  var currentState: Controller = new IntroController
+  def initialState: Controller = new IntroController
 
   trait Controller extends State with View {
     def update(elapsed: Int): Unit
-    def changeController(newState: Controller): Unit = {
-      currentState = newState
-    }
   }
 
   def render(screen: Screen): Unit = {

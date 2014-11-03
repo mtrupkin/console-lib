@@ -32,7 +32,7 @@ class IntroController extends ViewStateMachine.Controller {
     if (newGame) {
       val world = new World()
       val controller = new GameController(world)
-      changeController(controller)
+      changeState(controller)
     }
   }
 

@@ -73,7 +73,7 @@ class GameController(val world: World) extends ViewStateMachine.Controller {
     world.update(elapsed)
 
     if (endGame) {
-      changeController(new IntroController)
+      changeState(new IntroController)
     }
   }
 
