@@ -6,11 +6,9 @@ package org.flagship.console.app
  */
 
 
-import org.flagship.console.terminal.SwingTerminal
+import app.GameEngine
 import org.flagship.console.Size
-import org.flagship.game.GameEngine
-import model.World
-import app.{IntroController, GameController}
+import org.flagship.console.terminal.SwingTerminal
 
 
 // TODO: fix right grab for vertical layout
@@ -24,3 +22,5 @@ object GameApp extends App {
 
   engine.gameLoop()
 }
+
+

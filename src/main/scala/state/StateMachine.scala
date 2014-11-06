@@ -2,10 +2,7 @@ package state
 
 // Created: 10/16/2014
 
-
-
 trait StateMachine {
-  outer =>
   type StateType <: State
 
   def initialState: StateType
@@ -24,10 +21,7 @@ trait StateMachine {
     def onExit(): Unit = {}
   }
 
-
   def update(elapsed: Int) = {
     currentState.update(elapsed)
   }
-
-
 }
