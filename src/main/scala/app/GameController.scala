@@ -1,21 +1,16 @@
 package app
 
-import org.flagship.console.control._
-import org.flagship.console.control.LayoutOp._
 import map.MapWidget
-import org.flagship.console.{Point, Size}
-import org.flagship.console.screen.{ConsoleKey, Screen}
 import model.World
-import org.flagship.game.ViewStateMachine
+import org.flagship.console.control.LayoutOp._
+import org.flagship.console.control._
+import org.flagship.console.screen.{ConsoleKey, Screen}
+import org.flagship.console.{Point, Size}
+import org.flagship.game.ControllerStateMachine
 
 // Created: 9/18/2014
 
-class GameController(val world: World) extends ViewStateMachine.Controller {
-
-  val size = Size(120, 42)
-
-  val mainWindow = new Composite("MainWindow", LayoutFlow.VERTICAL)
-  mainWindow.layout = Layout(right = GRAB, bottom = GRAB)
+class GameController(val world: World) extends ControllerStateMachine.ControllerState {
 
   val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = new Border(box = Box.SINGLE_TEE_BOTTOM, divider = Divider.DOUBLE))//border = Border.SINGLE)
   topPanel.layout = Layout(right = GRAB, bottom = NONE)
@@ -64,10 +59,8 @@ class GameController(val world: World) extends ViewStateMachine.Controller {
   topPanel.addControl(mainPanel)
   topPanel.addControl(detailPanel)
 
-  mainWindow.addControl(topPanel)
-  mainWindow.addControl(bottomPanel)
-
-  mainWindow.arrange(size)
+  addControl(topPanel)
+  addControl(bottomPanel)
 
   def update(elapsed: Int) {
     world.update(elapsed)
@@ -77,16 +70,10 @@ class GameController(val world: World) extends ViewStateMachine.Controller {
     }
   }
 
-  def render(screen: Screen) {
-    mainWindow.render(screen)
-  }
-
   //
   var endGame = false
 
   def keyPressed(key: ConsoleKey) {
-    mainWindow.keyPressed(key)
-
     import scala.swing.event.Key._
 
     val k = key.keyValue

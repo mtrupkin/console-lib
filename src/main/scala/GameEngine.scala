@@ -1,29 +1,39 @@
 package org.flagship.game
 
+import model.World
+import org.flagship.console.control.LayoutOp._
+import org.flagship.console.control.{Control, Layout, LayoutFlow, Composite}
 import org.flagship.console.screen._
 
 import org.flagship.console.terminal.Terminal
 import org.flagship.console.Size
-import state.{StateMachine}
-import app.IntroController
+import state.{  StateMachine}
+import app.{GameController, IntroController}
 
 /**
  * User: mtrupkin
  * Date: 7/5/13
  */
 
-trait View {
-  def render(screen: Screen): Unit
-  def keyPressed(key: ConsoleKey): Unit
-}
+object ControllerStateMachine extends StateMachine {
+  type StateType = ControllerState
+  val size = Size(120, 42)
+  //def initialState: Controller = new IntroController
+  def initialState: StateType = new GameController(new World)
+  //initialState.onEnter()
 
-object ViewStateMachine extends StateMachine with View {
-  type StateType = Controller
+  trait ControllerState extends State {
+    val window = new Composite("MainWindow", LayoutFlow.VERTICAL)
+    window.layout = Layout(right = GRAB, bottom = GRAB)
+    def addControl(control: Control): Unit = window.addControl(control)
 
-  def initialState: Controller = new IntroController
-
-  trait Controller extends State with View {
     def update(elapsed: Int): Unit
+    def render(screen: Screen): Unit = window.render(screen)
+    def keyPressed(key: ConsoleKey): Unit
+
+    override def onEnter(): Unit = {
+      window.arrange(size)
+    }
   }
 
   def render(screen: Screen): Unit = {
@@ -35,8 +45,12 @@ object ViewStateMachine extends StateMachine with View {
   }
 }
 
-class GameEngine(size: Size, terminal: Terminal)  {
 
+
+
+
+class GameEngine(size: Size, terminal: Terminal)  {
+  val AppController = ControllerStateMachine
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
   val screen = Screen(size)
@@ -46,14 +60,14 @@ class GameEngine(size: Size, terminal: Terminal)  {
 
   def render() {
     if (!completed()) {
-      ViewStateMachine.currentState.render(screen)
+      AppController.render(screen)
       terminal.render(screen)
     }
   }
 
   def processInput() {
     for (key <- terminal.key) {
-      ViewStateMachine.currentState.keyPressed(key)
+      AppController.keyPressed(key)
       terminal.key = None
     }
   }
@@ -75,7 +89,7 @@ class GameEngine(size: Size, terminal: Terminal)  {
       while (accumulator >= updateRate) {
         updates += 1
         processInput
-        ViewStateMachine.update(updateRate.toInt)
+        AppController.update(updateRate.toInt)
 
         accumulator -= updateRate
       }
