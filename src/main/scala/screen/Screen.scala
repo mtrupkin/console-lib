@@ -31,7 +31,7 @@ trait Screen {
 
   def subScreen(origin: Point, size: Size): Screen = new SubScreen(origin, size, this)
 
-  private def write(x: Int, y: Int, s: String): Unit = {
+  def write(x: Int, y: Int, s: String): Unit = {
     var pos = x
     s.foreach( c => { write(pos, y, c); pos += 1 } )
   }

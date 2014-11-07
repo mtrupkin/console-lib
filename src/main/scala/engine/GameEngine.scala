@@ -53,7 +53,7 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
       render
       frames += 1
 
-      if ( currentTime - fpsTimer > 1000 ) {
+      if ( currentTime - fpsTimer > 10000 ) {
         fpsTimer = System.currentTimeMillis()
         println(s"frames: $frames updates: $updates")
         frames = 0

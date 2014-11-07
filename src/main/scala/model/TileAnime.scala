@@ -12,6 +12,7 @@ object Animations {
 //    ScreenChar('|', fg = LightGrey),
 //    ScreenChar('/', fg = LightGrey),
 //    ScreenChar('-', fg = LightGrey))
+    ScreenChar('.', fg = LightGrey),
     ScreenChar('\\', fg = LightGrey),
     ScreenChar('\u2502', fg = LightGrey),
     ScreenChar('/', fg = LightGrey),

@@ -85,7 +85,6 @@ trait Game { self: ControllerStateMachine =>
         case Enter => ???
         case Escape => endGame = true
         case _ =>
-        case _ =>
       }
     }
   }

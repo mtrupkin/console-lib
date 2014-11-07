@@ -75,7 +75,7 @@ class FloorTile extends Tile {
   }
 
   def flipOn(delay: Int) {
-    val a = new TempAnime(anim, new FrameAnime(Animations.flip, 20), 100)
+    val a = new TempAnime(anim, new FrameAnime(Animations.flip, 20), 120)
 
     anim = new DelayedAnime(anim, a, delay)
   }

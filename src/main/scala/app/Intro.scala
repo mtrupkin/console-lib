@@ -8,13 +8,21 @@ import console.screen.{ConsoleKey, Screen}
 
 trait Intro { self: ControllerStateMachine =>
   class IntroController extends ControllerState  {
-
     var elapsed = 0
 
     val label1 = new Control {
-      override def minSize = Size(20, 1)
+      val items: List[String] = List("New", "Load", "Options", "Exit")
+      val longest: String = items.reduceLeft((a,b) => if(a.length>b.length) a else b)
+
+      override def minSize = Size(2 + longest.length, 2 + items.size)
+
       override def render(screen: Screen): Unit = {
-        screen.write(s"${elapsed}")
+        for ((item, i) <- items.zipWithIndex) {
+          screen.write(0, i, item)
+        }
+
+        //items.foreach(s => screen.write(s"${s}"))
+        //screen.write(s"${elapsed}")
       }
     }
 
