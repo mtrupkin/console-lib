@@ -87,5 +87,6 @@ trait Game { self: ControllerStateMachine =>
         case _ =>
       }
     }
+
   }
 }

@@ -7,7 +7,6 @@ package console.app
 
 import console.core.Size
 import console.engine.GameEngine
-import console.model.World
 import console.terminal.SwingTerminal
 import console.controller.ControllerStateMachine
 

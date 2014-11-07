@@ -19,11 +19,10 @@ import console.screen._
 trait Terminal {
   val terminalSize: Size
   var closed = false
-  //var keyQueue: List[ConsoleKey] = Nil
-  var key: Option[ConsoleKey] = None
-  var mouse: console.core.Point = console.core.Point.Origin
 
-  def addMouseAdapter(mouseAdapter: MouseAdapter)
+  var key: Option[ConsoleKey] = None
+  var mouse: Option[console.core.Point] = Some(console.core.Point.Origin)
+
   def render(screen: Screen)
   def close()
 }
@@ -56,14 +55,9 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   val mouseAdapter = new MouseAdapter {
     override def mouseMoved(e: MouseEvent) {
-      Option(e) match {
-        case Some(x) => {
-          val x: Int = e.getX / charSize.width
-          val y: Int = e.getY / charSize.height
-          mouse = new console.core.Point(x, y)
-        }
-        case _ => {}
-      }
+      val x: Int = e.getX / charSize.width
+      val y: Int = e.getY / charSize.height
+      mouse = Some(new console.core.Point(x, y))
     }
 
     override def mouseClicked(e: MouseEvent) {
@@ -72,11 +66,6 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   terminalCanvas.addMouseListener(mouseAdapter)
   terminalCanvas.addMouseMotionListener(mouseAdapter)
-
-  def addMouseAdapter(mouseAdapter: MouseAdapter) {
-    terminalCanvas.addMouseListener(mouseAdapter)
-    terminalCanvas.addMouseMotionListener(mouseAdapter)
-  }
 
   override def closeOperation( ) {
     closed = true

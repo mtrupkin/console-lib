@@ -26,6 +26,10 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
       controller.keyPressed(key)
       terminal.key = None
     }
+    for (mouse <- terminal.mouse) {
+      controller.mouseMoved(mouse)
+      terminal.mouse = None
+    }
   }
 
   def gameLoop() {
