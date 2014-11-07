@@ -33,16 +33,19 @@ object Divider {
 object Box {
   import ASCII._
 
+
   def side(box:Box, side: BoxSide): Char = {
+    import BoxSide._
+
     side match {
-      case BoxSide.TOP_LEFT => box.topLeft
-      case BoxSide.TOP => box.top
-      case BoxSide.TOP_RIGHT => ULCORNER
-      case BoxSide.RIGHT => ULCORNER
-      case BoxSide.BOTTOM => ULCORNER
-      case BoxSide.BOTTOM => ULCORNER
-      case BoxSide.BOTTOM_LEFT => ULCORNER
-      case BoxSide.LEFT => ULCORNER
+      case TOP_LEFT => box.topLeft
+      case TOP => box.top
+      case TOP_RIGHT => box.topRight
+      case RIGHT => box.right
+      case BOTTOM_RIGHT => box.bottomRight
+      case BOTTOM => box.bottom
+      case BOTTOM_LEFT => box.bottomLeft
+      case LEFT => box.left
     }
   }
 

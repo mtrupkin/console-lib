@@ -10,9 +10,7 @@ import console.state.StateMachine
 
 trait ControllerStateMachine extends StateMachine with Intro with Game {
   type StateType = ControllerState
-
   def initialSize: Size
-  def initialState: ControllerState
 
   var size: Size = initialSize
   var screen = Screen(size)
@@ -32,6 +30,12 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
     currentState.mouseMoved(mouse)
   }
 
+  def mouseExited(): Unit = currentState.mouseExited()
+
+  def mouseEntered(): Unit = {
+
+  }
+
   def resize(newSize: Size): Unit = {
     size = newSize
   }
@@ -39,19 +43,33 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
   trait ControllerState extends State {
     val window = new Composite("MainWindow", LayoutFlow.VERTICAL)
     window.layout = Layout(right = GRAB, bottom = GRAB)
-    var mouse: Point = Point.Origin
+    var mouse: Option[Point] = None
 
     def addControl(control: Control): Unit = window.addControl(control)
 
     def update(elapsed: Int): Unit
     def render(screen: Screen): Unit = {
       window.render(screen)
-      screen.write(mouse.x, mouse.y, 'X')
+      for (m <- mouse) {
+        screen.write(m.x, m.y, '+')
+      }
     }
 
     def keyPressed(key: ConsoleKey): Unit
     def mouseMoved(mouse: Point): Unit = {
-      this.mouse = mouse
+      clearMouse()
+      this.mouse = Some(mouse)
+    }
+
+    def mouseExited(): Unit = {
+      clearMouse()
+      this.mouse = None
+    }
+
+    def clearMouse(): Unit = {
+      for (m <- this.mouse) {
+        screen.clear(m.x, m.y)
+      }
     }
 
     override def onEnter(): Unit = {

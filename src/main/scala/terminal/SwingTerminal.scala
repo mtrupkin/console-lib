@@ -21,7 +21,8 @@ trait Terminal {
   var closed = false
 
   var key: Option[ConsoleKey] = None
-  var mouse: Option[console.core.Point] = Some(console.core.Point.Origin)
+  var mouse: Option[console.core.Point] = None
+  var mouseExit: Boolean = false
 
   def render(screen: Screen)
   def close()
@@ -53,20 +54,6 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
   peer.addKeyListener(keyListener)
   terminalCanvas.addKeyListener(keyListener)
 
-  val mouseAdapter = new MouseAdapter {
-    override def mouseMoved(e: MouseEvent) {
-      val x: Int = e.getX / charSize.width
-      val y: Int = e.getY / charSize.height
-      mouse = Some(new console.core.Point(x, y))
-    }
-
-    override def mouseClicked(e: MouseEvent) {
-    }
-  }
-
-  terminalCanvas.addMouseListener(mouseAdapter)
-  terminalCanvas.addMouseMotionListener(mouseAdapter)
-
   override def closeOperation( ) {
     closed = true
     visible = false
@@ -82,16 +69,37 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   pack()
 
-//  val url = ClassLoader.getSystemResource("icon.png")
-//  val img = Toolkit.getDefaultToolkit().createImage(url)
-//  peer.setIconImage(img)
+  val url1 = ClassLoader.getSystemResource("icon-20x20.png")
+  val url2 = ClassLoader.getSystemResource("icon-40x40.png")
+  val img1 = Toolkit.getDefaultToolkit().createImage(url1)
+  val img2 = Toolkit.getDefaultToolkit().createImage(url2)
+  import scala.collection.JavaConverters._
+  peer.setIconImages(scala.collection.immutable.List(img1, img2).asJava)
 
+  // center frame on screen
   peer.setLocationRelativeTo(null)
 
   terminalCanvas.createBufferStrategy(2)
 
   val charSize = terminalCanvas.charSize(terminalCanvas.getGraphics)
-  //val charSize = Size(1, 1)
+
+  val mouseAdapter = new MouseAdapter {
+    override def mouseMoved(e: MouseEvent) {
+      val x: Int = e.getX / charSize.width
+      val y: Int = e.getY / charSize.height
+      mouse = Some(new console.core.Point(x, y))
+    }
+
+    override def mouseClicked(e: MouseEvent) {
+    }
+
+    override def mouseExited(e: MouseEvent): Unit = {
+      mouseExit = true
+    }
+  }
+
+  terminalCanvas.addMouseListener(mouseAdapter)
+  terminalCanvas.addMouseMotionListener(mouseAdapter)
 
 
   def render(screen: Screen) {
@@ -155,7 +163,11 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
       renderGraphics(screen, g2)
 
       if (!bufferStrategy.contentsLost()) {
-        bufferStrategy.show()
+        try {
+          bufferStrategy.show()
+        } catch {
+          case ise: IllegalStateException => println("see me about this")
+        }
       }
 
       g2.dispose()

@@ -18,11 +18,8 @@ trait Intro { self: ControllerStateMachine =>
 
       override def render(screen: Screen): Unit = {
         for ((item, i) <- items.zipWithIndex) {
-          screen.write(0, i, item)
+          screen.write(1, i, item)
         }
-
-        //items.foreach(s => screen.write(s"${s}"))
-        //screen.write(s"${elapsed}")
       }
     }
 

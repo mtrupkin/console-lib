@@ -17,6 +17,8 @@ trait Screen {
   def update(x: Int, y: Int, sc: ScreenChar )
 
   def clear() = foreach((x, y, s) => this(x, y) = ScreenChar.Blank)
+  def clear(x: Int, y: Int) = this(x, y) = ScreenChar.Blank
+
   def foreach(f: (Int, Int, ScreenChar) => Unit ): Unit = {
     for (
       i <- 0 until size.width;

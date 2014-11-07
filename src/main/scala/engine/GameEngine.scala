@@ -30,6 +30,10 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
       controller.mouseMoved(mouse)
       terminal.mouse = None
     }
+    if (terminal.mouseExit) {
+      controller.mouseExited()
+      terminal.mouseExit = false
+    }
   }
 
   def gameLoop() {
