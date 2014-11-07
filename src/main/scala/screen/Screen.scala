@@ -1,7 +1,7 @@
-package org.flagship.console.screen
+package console.screen
 
-import org.flagship.console.{Point, Size}
-import org.flagship.console.screen.RGBColor._
+import console.core.{Size, Point}
+import console.screen.RGBColor._
 
 /**
  * User: mtrupkin

@@ -1,8 +1,8 @@
-package org.flagship.console.control
+package console.control
 
-import org.flagship.console.control.{LayoutOp, Layout}
-import org.flagship.console._
-import org.flagship.console.screen._
+import console.core.{Size, Point}
+import console.screen.{ConsoleKey, Screen}
+
 
 /**
  * User: mtrupkin

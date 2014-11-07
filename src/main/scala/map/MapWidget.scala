@@ -1,8 +1,8 @@
-package map
+package console.map
 
-import model.TileMap
-import org.flagship.console.control.Control
-import org.flagship.console.screen.Screen
+import console.model.TileMap
+import console.control.Control
+import console.screen.Screen
 
 /**
  * Created by mtrupkin on 4/6/2014.

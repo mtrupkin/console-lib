@@ -1,4 +1,4 @@
-package org.flagship.console.control
+package console.control
 
 /**
  * User: mtrupkin

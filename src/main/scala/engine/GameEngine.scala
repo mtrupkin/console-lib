@@ -1,33 +1,29 @@
-package app
+package console.engine
 
-import org.flagship.console.Size
-import org.flagship.console.screen._
-import org.flagship.console.terminal.Terminal
+import console.controller.ControllerStateMachine
+import console.terminal.Terminal
 
 /**
  * User: mtrupkin
  * Date: 7/5/13
  */
 
-class GameEngine(size: Size, terminal: Terminal)  {
-  val AppController = ControllerStateMachine
-
+class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
-
 
   def completed(): Boolean = terminal.closed
 
   def render() {
     if (!completed()) {
-      val screen = AppController.render()
+      val screen = controller.render()
       terminal.render(screen)
     }
   }
 
   def processInput() {
     for (key <- terminal.key) {
-      AppController.keyPressed(key)
+      controller.keyPressed(key)
       terminal.key = None
     }
   }
@@ -49,7 +45,7 @@ class GameEngine(size: Size, terminal: Terminal)  {
       while (accumulator >= updateRate) {
         updates += 1
         processInput
-        AppController.update(updateRate.toInt)
+        controller.update(updateRate.toInt)
 
         accumulator -= updateRate
       }

@@ -1,4 +1,4 @@
-package org.flagship.console.screen
+package console.screen
 
 /**
  * Some text graphics, taken from http://en.wikipedia.org/wiki/Codepage_437

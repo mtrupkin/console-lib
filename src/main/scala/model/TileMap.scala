@@ -1,7 +1,7 @@
-package model
+package console.model
 
-import org.flagship.console.screen.{RGBColor, ScreenChar}
-import org.flagship.console.{Point, Size}
+import console.core.{Size, Point}
+import console.screen.{RGBColor, ScreenChar}
 import scala.Array._
 
 /**
@@ -26,7 +26,7 @@ trait TileMap {
 }
 
 class World extends TileMap {
-  var time = 0;
+  var time = 0
   val size = Size(60, 30)
   val tiles = ofDim[Tile](size.width, size.height)
   val player: Player = new Player("player", Point(0,0), ScreenChar('@'))

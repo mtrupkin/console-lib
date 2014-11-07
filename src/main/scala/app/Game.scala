@@ -1,11 +1,12 @@
-package app
+package console.app
 
-import map.MapWidget
-import model.World
-import org.flagship.console.{Point, Size}
-import org.flagship.console.control.LayoutOp._
-import org.flagship.console.control._
-import org.flagship.console.screen.{ConsoleKey, Screen}
+import console.controller.ControllerStateMachine
+import console.core.{Size, Point}
+import console.map.MapWidget
+import console.model.World
+import console.control.LayoutOp._
+import console.control._
+import console.screen.{ConsoleKey, Screen}
 
 // Created on 11/6/2014.
 

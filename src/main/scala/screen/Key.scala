@@ -1,4 +1,4 @@
-package org.flagship.console.screen
+package console.screen
 
 /**
  * User: mtrupkin

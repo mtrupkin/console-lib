@@ -1,11 +1,11 @@
-package app
+package console.controller
 
-import model.World
-import org.flagship.console.{Point, Size}
-import org.flagship.console.control.LayoutOp._
-import org.flagship.console.control._
-import org.flagship.console.screen.{ConsoleKey, Screen}
-import state.StateMachine
+import console.app.{Game, Intro}
+import console.core.Size
+import console.control.LayoutOp._
+import console.control._
+import console.screen.{ConsoleKey, Screen}
+import console.state.StateMachine
 
 trait ControllerStateMachine extends StateMachine with Intro with Game {
   type StateType = ControllerState
@@ -48,7 +48,3 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
   }
 }
 
-object ControllerStateMachine extends ControllerStateMachine {
-  lazy val initialSize: Size = Size(120, 42)
-  lazy val initialState: ControllerState = new GameController(new World)
-}

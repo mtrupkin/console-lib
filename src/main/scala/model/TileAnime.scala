@@ -1,6 +1,6 @@
-package model
+package console.model
 
-import org.flagship.console.screen.{RGBColor, ScreenChar}
+import console.screen.{RGBColor, ScreenChar}
 import scala.util.Random
 
 // Created: 4/10/2014

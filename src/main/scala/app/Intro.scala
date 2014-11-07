@@ -1,9 +1,10 @@
-package app
+package console.app
 
-import model.World
-import org.flagship.console.Size
-import org.flagship.console.control.Control
-import org.flagship.console.screen.{ConsoleKey, Screen}
+import console.controller.ControllerStateMachine
+import console.core.Size
+import console.model.World
+import console.control.Control
+import console.screen.{ConsoleKey, Screen}
 
 trait Intro { self: ControllerStateMachine =>
   class IntroController extends ControllerState  {

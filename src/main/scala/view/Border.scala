@@ -1,7 +1,7 @@
-package org.flagship.console.control
+package console.control
 
-import org.flagship.console.screen.{Screen, ASCII}
-import org.flagship.console.{Point, Size}
+import console.core.{Size, Point}
+import console.screen.{Screen, ASCII}
 
 // Created: 4/4/2014
 

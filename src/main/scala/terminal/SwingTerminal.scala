@@ -1,15 +1,15 @@
-package org.flagship.console.terminal
+package console.terminal
 
 
 import java.awt.image.BufferStrategy
 
+import console.core.Size
+
 import scala.swing.{BorderPanel, Frame}
 import scala.swing.event.{KeyReleased, Key, KeyPressed}
 import java.awt.event.{MouseEvent, MouseAdapter, KeyEvent, KeyAdapter}
-import org.flagship.console.{Size, Point}
 import java.awt._
-import org.flagship.console.Size
-import org.flagship.console.screen._
+import console.screen._
 
 
 /**
@@ -21,7 +21,7 @@ trait Terminal {
   var closed = false
   //var keyQueue: List[ConsoleKey] = Nil
   var key: Option[ConsoleKey] = None
-  var mouse: Point = Point.Origin
+  var mouse: console.core.Point = console.core.Point.Origin
 
   def addMouseAdapter(mouseAdapter: MouseAdapter)
   def render(screen: Screen)
@@ -60,7 +60,7 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
         case Some(x) => {
           val x: Int = e.getX / charSize.width
           val y: Int = e.getY / charSize.height
-          mouse = new Point(x, y)
+          mouse = new console.core.Point(x, y)
         }
         case _ => {}
       }
@@ -221,7 +221,7 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
     }
   }
 
-  import org.flagship.console.screen.RGBColor._
+  import console.screen.RGBColor._
 
   def toAwtColor(c: RGBColor): java.awt.Color = {
     c match {
@@ -248,7 +248,7 @@ object AwtColor {
   val LightGreen = getAwtColor(RGBColor.LightGreen)
   val LightGrey = getAwtColor(RGBColor.LightGrey)
 
-  def getAwtColor(c: org.flagship.console.screen.RGBColor): java.awt.Color = new java.awt.Color(c.r, c.g, c.b)
+  def getAwtColor(c: console.screen.RGBColor): java.awt.Color = new java.awt.Color(c.r, c.g, c.b)
 }
 
 

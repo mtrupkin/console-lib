@@ -1,8 +1,8 @@
-package org.flagship.console.control
+package console.control
 
-import org.flagship.console.screen.{ASCII, Screen}
-import org.flagship.console.{Point, Size}
-import org.flagship.console.control.LayoutFlow._
+import console.core.{Size, Point}
+import console.screen.{ASCII, Screen}
+import console.control.LayoutFlow._
 
 /**
  * S4i Systems Inc.

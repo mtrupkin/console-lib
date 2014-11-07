@@ -1,7 +1,7 @@
-package model
+package console.model
 
-import org.flagship.console.Point
-import org.flagship.console.screen.ScreenChar
+import console.core.Point
+import console.screen.ScreenChar
 
 // Created: 4/8/2014
 
