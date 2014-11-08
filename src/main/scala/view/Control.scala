@@ -9,7 +9,7 @@ import console.screen.{ConsoleKey, Screen}
  * Date: 7/6/13
  */
 trait Control {
-  def minSize: Size //= Size.ONE
+  def minSize: Size
   var dimension: Size = Size.ONE
 
   var position = Point.Origin

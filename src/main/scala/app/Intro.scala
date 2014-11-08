@@ -1,5 +1,6 @@
 package console.app
 
+import console.control.LayoutOp._
 import console.controller.ControllerStateMachine
 import console.core.{Point, Size}
 import console.model.World
@@ -45,9 +46,10 @@ trait Intro { self: ControllerStateMachine =>
 
     }
     val listBoarder = new Composite(name = "list-border", border = Border.DOUBLE)
-    //listBoarder.addControl(list)
-    //addControl(listBoarder)
-    addControl(list)
+    listBoarder.layout = Layout(right = SNAP, bottom = GRAB)
+    listBoarder.addControl(list)
+    addControl(listBoarder)
+    //addControl(list)
 
     def update(elapsed: Int): Unit = {
       this.elapsed += elapsed
