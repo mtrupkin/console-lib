@@ -55,8 +55,13 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
       }
     }
 
-    def keyPressed(key: ConsoleKey): Unit
+    def keyPressed(key: ConsoleKey): Unit = {
+      window.keyPressed(key)
+    }
+
     def mouseMoved(mouse: Point): Unit = {
+      window.mouseMoved(mouse)
+
       clearMouse()
       this.mouse = Some(mouse)
     }

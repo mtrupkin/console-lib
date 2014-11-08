@@ -73,11 +73,10 @@ trait Game { self: ControllerStateMachine =>
     //
     var endGame = false
 
-    def keyPressed(key: ConsoleKey) {
+    override def keyPressed(key: ConsoleKey) {
       import scala.swing.event.Key._
 
-      val k = key.keyValue
-      k match {
+      key.keyValue match {
         case W | Up => world.player.move(Point.Up)
         case A | Left => world.player.move(Point.Left)
         case S | Down => world.player.move(Point.Down)

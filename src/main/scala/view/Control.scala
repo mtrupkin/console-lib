@@ -20,8 +20,9 @@ trait Control {
 
   def render(screen: Screen)
 
-  def keyPressed(key: ConsoleKey) {}
-  def mouseClicked(mouse: Point) {}
+  def keyPressed(key: ConsoleKey): Unit = {}
+  def mouseClicked(mouse: Point): Unit = {}
+  def mouseMoved(mouse: Point): Unit = {}
   def update(elapsedTime: Int) {}
 
   def compact() {

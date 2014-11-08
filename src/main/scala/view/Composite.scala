@@ -1,7 +1,7 @@
 package console.control
 
 import console.core.{Size, Point}
-import console.screen.{ASCII, Screen}
+import console.screen.{ConsoleKey, ASCII, Screen}
 import console.control.LayoutFlow._
 
 /**
@@ -43,7 +43,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
   var controls = List[Control]()
 
   def addControl(control: Control) {
-    controls = controls :+ control
+    controls = control :: controls
   }
 
   def render(screen: Screen) {
@@ -121,6 +121,7 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
         remaining = Size(remaining.width, remaining.height - c.dimension.height)
       }
     }
+
   }
 
 
@@ -131,10 +132,26 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
     }
   }
 
+  override def mouseMoved(mouse: Point) {
+    val m = new Point(mouse.x - position.x, mouse.y - position.y)
+    for( c <- controls ) {
+      if (in(c, m)) {c.mouseMoved(m - border.borderOffset)}
+    }
+  }
+
+  override def keyPressed(key: ConsoleKey): Unit = {
+    for( c <- controls ) {
+      c.keyPressed(key)
+    }
+  }
+
   def in(c: Control, p: Point): Boolean = {
-    c.position.x >= p.x && c.position.y >= p.y &&
-    c.position.x + c.dimension.width <= p.x &&
-    c.position.y + c.dimension.height <= p.y
+    val cp = c.position + border.borderOffset
+
+    p.x >= cp.x &&
+      p.x < cp.x + c.dimension.width &&
+      p.y >= cp.y &&
+      p.y < cp.y + c.dimension.height
   }
 
   def hFlow(controls: List[Control]) {
