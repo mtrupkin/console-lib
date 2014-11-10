@@ -39,6 +39,12 @@ trait Control {
   }
 
   def snap(size: Size) {
+//    layout match {
+//      case LayoutOp.SNAP => position = position.copy(x = size.width - dimension.width)
+//    }
+    if (layout.right == LayoutOp.SNAP) {
+      position = position.copy(x = size.width - dimension.width)
+    }
     if (layout.right == LayoutOp.SNAP) {
       position = position.copy(x = size.width - dimension.width)
     }

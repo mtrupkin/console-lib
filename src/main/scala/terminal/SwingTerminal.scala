@@ -69,8 +69,9 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   pack()
 
-  val url1 = ClassLoader.getSystemResource("icon-20x20.png")
-  val url2 = ClassLoader.getSystemResource("icon-40x40.png")
+
+  val url1 = getClass.getClassLoader.getResource("icon-20x20.png")
+  val url2 = getClass.getClassLoader.getResource("icon-40x40.png")
   val img1 = Toolkit.getDefaultToolkit().createImage(url1)
   val img2 = Toolkit.getDefaultToolkit().createImage(url2)
   import scala.collection.JavaConverters._

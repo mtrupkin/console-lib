@@ -1,0 +1,1 @@
+javapackager -deploy -outdir dist -outfile console-app -srcdir C:\Users\mtrupkin\Desktop\console-lib\target\scala-2.10 -srcfiles console-lib-assembly-1.0.jar -appclass console.app.GameApp -name console-app  -title "Console App"

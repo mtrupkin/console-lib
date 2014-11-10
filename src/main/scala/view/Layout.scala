@@ -22,6 +22,7 @@ object LayoutOp {
 
 case class Layout(
   left: LayoutOp = LayoutOp.NONE,
+  center: LayoutOp = LayoutOp.NONE,
   right: LayoutOp = LayoutOp.NONE,
   top: LayoutOp = LayoutOp.NONE,
   bottom: LayoutOp = LayoutOp.NONE)
