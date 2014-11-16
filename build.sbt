@@ -4,9 +4,7 @@ organization := "org.trupkin"
 
 version := "0.0.1"
 
-scalaVersion := "2.10.3"
-
-sbtVersion := "0.13.6"
+scalaVersion := "2.10.4"
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
