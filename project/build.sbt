@@ -1,0 +1,1 @@
+libraryDependencies += "me.lessis" %% "bintry" % "0.3.0"
