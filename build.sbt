@@ -12,7 +12,7 @@ libraryDependencies ++= Seq(
   "org.scala-lang" % "scala-swing" % "2.10.4"
 )
 
-addArtifact( Artifact("myproject", "dist", "zip"), launch4j)
+addArtifact( Artifact("myproject", "dist", "zip"), buildLauncher)
 
 publishTo := Some(Resolver.file("file",  new File( Path.userHome.absolutePath + "/file-repo"))( Patterns("[artifact](-[classifier]).[ext]") ))
 
