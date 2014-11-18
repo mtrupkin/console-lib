@@ -18,12 +18,18 @@ licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
 releaseSettings
 
+publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))) // make sbt-release happy
+
 publish := {
   val user = "mtrupkin"
+  val owner = user
+  val apiKey = "8189233b0eedd88871565ae0acbf641330e5394f"
+  val bintrayRepository = "test"
+  val bintrayPackage = "console-lib"
   val uploadFile = buildSfx.value
-  val bty = bintry.Client(user, "8189233b0eedd88871565ae0acbf641330e5394f")
-  val repo = bty.repo(user, "test")
-  val pack = repo.get("console-lib")
+  val bty = bintry.Client(user, apiKey)
+  val repo = bty.repo(owner, bintrayRepository)
+  val pack = repo.get(bintrayPackage)
   println(s"create version ${version.value}")
   val verFuture = pack.createVersion(version.value)(as.json4s.Json)
   Await.result(verFuture, Duration.Inf)
