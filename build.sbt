@@ -16,9 +16,24 @@ libraryDependencies ++= Seq(
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
-jreHome := new File("c:\\java-util\\jre")
-
 releaseSettings
+
+jreHome := (target in buildLauncher).value / "jre"
+
+lazy val extractJRE = TaskKey[File]("extract-jre", "Extract embedded JRE")
+
+extractJRE := {
+  val launcherHome = (target in buildLauncher).value
+  launcherHome.mkdirs()
+  val jreZip = sourceDirectory.value / "build" / "windows" / "jre.zip"
+  IO.unzip(jreZip, launcherHome)
+  jreHome.value
+}
+
+buildLauncher := {
+  val jreHome = extractJRE.value
+  buildLauncher.value
+}
 
 publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))) // make sbt-release happy
 
