@@ -30,10 +30,7 @@ extractJRE := {
   jreHome.value
 }
 
-buildLauncher := {
-  val jreHome = extractJRE.value
-  buildLauncher.value
-}
+buildLauncher <<= buildLauncher.dependsOn(extractJRE)
 
 publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))) // make sbt-release happy
 
