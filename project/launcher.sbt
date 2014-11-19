@@ -3,4 +3,4 @@ resolvers ++= Seq(
 	"dsol-xml" at "http://simulation.tudelft.nl/maven/"
 )
 
-addSbtPlugin("org.trupkin" % "sbt-launch4j" % "0.0.5")
+addSbtPlugin("org.trupkin" % "sbt-launch4j" % "0.0.6-SNAPSHOT")
