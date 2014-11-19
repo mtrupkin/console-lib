@@ -16,6 +16,8 @@ libraryDependencies ++= Seq(
 
 licenses += ("MIT", url("http://opensource.org/licenses/MIT"))
 
+jreHome := new File("c:\\java-util\\jre")
+
 releaseSettings
 
 publishTo := Some(Resolver.file("file",  new File(Path.userHome.absolutePath+"/.m2/repository"))) // make sbt-release happy
