@@ -33,7 +33,10 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
   def mouseExited(): Unit = currentState.mouseExited()
 
   def mouseEntered(): Unit = {
+  }
 
+  def mouseClick(mouse: Point): Unit = {
+    currentState.mouseClick(mouse)
   }
 
   def resize(newSize: Size): Unit = {
@@ -49,10 +52,10 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
 
     def update(elapsed: Int): Unit
     def render(screen: Screen): Unit = {
+//      for (m <- mouse) {
+//        screen.write(m.x, m.y, '+')
+//      }
       window.render(screen)
-      for (m <- mouse) {
-        screen.write(m.x, m.y, '+')
-      }
     }
 
     def keyPressed(key: ConsoleKey): Unit = {
@@ -64,6 +67,10 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
 
       clearMouse()
       this.mouse = Some(mouse)
+    }
+
+    def mouseClick(mouse: Point): Unit = {
+      window.mouseClicked(mouse)
     }
 
     def mouseExited(): Unit = {

@@ -30,6 +30,11 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
       controller.mouseMoved(mouse)
       terminal.mouse = None
     }
+
+    for (mouse <- terminal.mouseClick) {
+      controller.mouseClick(mouse)
+      terminal.mouseClick = None
+    }
     if (terminal.mouseExit) {
       controller.mouseExited()
       terminal.mouseExit = false

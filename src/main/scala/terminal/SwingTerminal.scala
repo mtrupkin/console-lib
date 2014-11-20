@@ -22,6 +22,7 @@ trait Terminal {
 
   var key: Option[ConsoleKey] = None
   var mouse: Option[console.core.Point] = None
+  var mouseClick: Option[console.core.Point] = None
   var mouseExit: Boolean = false
 
   def render(screen: Screen)
@@ -85,13 +86,19 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
   val charSize = terminalCanvas.charSize(terminalCanvas.getGraphics)
 
   val mouseAdapter = new MouseAdapter {
-    override def mouseMoved(e: MouseEvent) {
+    def textPosition(e: MouseEvent): (Int, Int) = {
       val x: Int = e.getX / charSize.width
       val y: Int = e.getY / charSize.height
+      (x, y)
+    }
+    override def mouseMoved(e: MouseEvent) {
+      val (x, y) = textPosition(e)
       mouse = Some(new console.core.Point(x, y))
     }
 
-    override def mouseClicked(e: MouseEvent) {
+    override def mouseClicked(e: MouseEvent): Unit = {
+      val (x, y) = textPosition(e)
+      mouseClick = Some(new console.core.Point(x, y))
     }
 
     override def mouseExited(e: MouseEvent): Unit = {
@@ -190,8 +197,8 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
         screen.foreach(drawScreenCharacter)
 
         def drawScreenCharacter(x: Int, y: Int, s: ScreenChar) {
-
           g2.setColor(toAwtColor(s.fg))
+
           drawString(x, y, s.c.toString)
         }
 
