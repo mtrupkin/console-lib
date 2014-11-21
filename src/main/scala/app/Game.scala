@@ -1,27 +1,27 @@
 package console.app
 
 import console.controller.ControllerStateMachine
-import console.core.{Size, Point}
 import console.map.MapWidget
 import console.model.World
-import console.control.LayoutOp._
-import console.control._
+import me.mtrupkin.console.control._
 import console.screen.{ConsoleKey, Screen}
+import me.mtrupkin.geometry.{Point, Size}
+import me.mtrupkin.console.layout._
 
 // Created on 11/6/2014.
 
 trait Game { self: ControllerStateMachine =>
   class GameController(val world: World) extends ControllerState {
+    val window = new Composite(name = "window", layoutFlow = Orientation.VERTICAL)
 
-    val topPanel = new Composite(name = "topPanel", layoutFlow = LayoutFlow.HORIZONTAL, border = new Border(box = Box.SINGLE_TEE_BOTTOM, divider = Divider.DOUBLE))//border = Border.SINGLE)
-    topPanel.layout = Layout(right = GRAB, bottom = NONE)
+    val topPanel = new Composite(name = "topPanel", border = new Border(box = Box.SINGLE_TEE_BOTTOM, divider = Divider.DOUBLE))//border = Border.SINGLE)
+    topPanel.layout = Layout.FILL_RIGHT
 
     val bottomPanel = new Composite(name = "bottomPanel", border = Border.SINGLE_SANS_TOP)
-    bottomPanel.layout = Layout(right = GRAB, bottom = GRAB)
+    bottomPanel.layout = Layout.FILL
 
     val mainBorder = new Border(box = Box.DOUBLE, sides = BorderSides(left = false, top = false, bottom = false))
     val mainPanel = new Composite(name = "mainPanel")
-    mainPanel.layout = Layout(right = NONE, bottom = NONE)
 
     val mapPanel = new MapWidget(world) {
       def onSelection = {
@@ -30,8 +30,8 @@ trait Game { self: ControllerStateMachine =>
     mainPanel.addControl(mapPanel)
 
     val detailBorder = new Border(box = Box.DOUBLE, sides = BorderSides(right = false, top = false, bottom = false))
-    val detailPanel = new Composite(name = "detailPanel", layoutFlow = LayoutFlow.VERTICAL)
-    detailPanel.layout = Layout(right = GRAB, bottom = GRAB)
+    val detailPanel = new Composite(name = "detailPanel", layoutFlow = Orientation.VERTICAL)
+    detailPanel.layout = Layout.FILL
 
 
     val label1 = new Control {
@@ -52,15 +52,12 @@ trait Game { self: ControllerStateMachine =>
         screen.write("label 3")
       }
     }
-    detailPanel.addControl(label1)
-    detailPanel.addControl(label2)
-    detailPanel.addControl(label3)
 
-    topPanel.addControl(mainPanel)
-    topPanel.addControl(detailPanel)
+    window.addControl(topPanel)
+    window.addControl(bottomPanel)
 
-    addControl(topPanel)
-    addControl(bottomPanel)
+    topPanel.addControls(Seq(mainPanel, detailPanel))
+    detailPanel.addControls(Seq(label1,label2,label3))
 
     def update(elapsed: Int) {
       world.update(elapsed)
@@ -73,7 +70,7 @@ trait Game { self: ControllerStateMachine =>
     //
     var endGame = false
 
-    override def keyPressed(key: ConsoleKey) {
+    def keyPressed(key: ConsoleKey) {
       import scala.swing.event.Key._
 
       key.keyValue match {
@@ -86,6 +83,5 @@ trait Game { self: ControllerStateMachine =>
         case _ =>
       }
     }
-
   }
 }

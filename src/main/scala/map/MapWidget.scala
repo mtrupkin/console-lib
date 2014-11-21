@@ -1,7 +1,7 @@
 package console.map
 
 import console.model.TileMap
-import console.control.Control
+import me.mtrupkin.console.control.Control
 import console.screen.Screen
 
 /**

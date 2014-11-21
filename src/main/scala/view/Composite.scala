@@ -1,15 +1,16 @@
-package console.control
+package me.mtrupkin.console.control
 
-import console.core.{Size, Point}
-import console.screen.{ConsoleKey, ASCII, Screen}
-import console.control.LayoutFlow._
+import console.screen.{ConsoleKey, Screen}
+import me.mtrupkin.geometry.{Point, Size}
+import me.mtrupkin.console.layout.Orientation
+
 
 /**
  * S4i Systems Inc.
  * User: mtrupkin
  * Date: 7/8/13
  */
-class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL, val border: Border = Border.NONE) extends Control {
+class Composite(val name: String, val layoutFlow: Orientation.EnumVal = Orientation.HORIZONTAL, val border: Border = Border.NONE) extends Control {
   def elementSize: Size = {
     var width = 1
     var height = 1
@@ -43,7 +44,11 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
   var controls = List[Control]()
 
   def addControl(control: Control) {
-    controls = control :: controls
+    controls = controls :+ control
+  }
+
+  def addControls(controls: Seq[Control]) {
+    this.controls = this.controls ++ controls
   }
 
   def render(screen: Screen) {
@@ -77,8 +82,8 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
     controls.foreach( c => c.compact() )
 
     layoutFlow match {
-      case HORIZONTAL => hFlow(controls)
-      case VERTICAL => vFlow(controls)
+      case Orientation.HORIZONTAL => hFlow(controls)
+      case Orientation.VERTICAL => vFlow(controls)
     }
 
     super.compact()
@@ -88,12 +93,12 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
     super.snap(size)
     //layoutManager.snap(dimension, controls)
     var remaining: Size = Size(dimension.width, dimension.height).subtract(border.borderSize)
-    if (layoutFlow == HORIZONTAL) {
+    if (layoutFlow == Orientation.HORIZONTAL) {
       for (c <- controls.reverse) {
         c.snap(remaining)
         remaining = Size(remaining.width - c.dimension.width, remaining.height)
       }
-    } else if (layoutFlow ==  VERTICAL) {
+    } else if (layoutFlow ==  Orientation.VERTICAL) {
       var remaining: Size = Size(size.width, size.height)
       for (c <- controls.reverse) {
         c.snap(remaining)
@@ -107,12 +112,12 @@ class Composite(val name: String, val layoutFlow: LayoutFlow.Value = HORIZONTAL,
     //layoutManager.grab(dimension, controls)
     var remaining: Size = Size(dimension.width, dimension.height).subtract(border.borderSize)
 
-    if (layoutFlow == HORIZONTAL) {
+    if (layoutFlow == Orientation.HORIZONTAL) {
       for(c <- controls.reverse) {
         c.grab(remaining)
         remaining = Size(remaining.width - c.dimension.width, remaining.height)
       }
-    } else if (layoutFlow == VERTICAL) {
+    } else if (layoutFlow == Orientation.VERTICAL) {
       for (d <- border.divider) {
         remaining = remaining.copy(height = remaining.height - Math.max(0, controls.length-1))
       }

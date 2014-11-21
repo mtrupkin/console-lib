@@ -1,7 +1,7 @@
 package console.model
 
-import console.core.Point
 import console.screen.ScreenChar
+import me.mtrupkin.geometry.Point
 
 // Created: 4/8/2014
 

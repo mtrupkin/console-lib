@@ -1,7 +1,8 @@
-package console.control
+package me.mtrupkin.console.control
 
-import console.core.{Size, Point}
 import console.screen.{Screen, ASCII}
+
+import me.mtrupkin.geometry.{Point, Size}
 
 // Created: 4/4/2014
 

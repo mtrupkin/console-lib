@@ -1,7 +1,7 @@
 package console.engine
 
 import console.controller.ControllerStateMachine
-import console.terminal.Terminal
+import me.mtrupkin.terminal.Terminal
 
 /**
  * User: mtrupkin
@@ -22,22 +22,9 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
   }
 
   def processInput() {
-    for (key <- terminal.key) {
-      controller.keyPressed(key)
-      terminal.key = None
-    }
-    for (mouse <- terminal.mouse) {
-      controller.mouseMoved(mouse)
-      terminal.mouse = None
-    }
-
-    for (mouse <- terminal.mouseClick) {
-      controller.mouseClick(mouse)
-      terminal.mouseClick = None
-    }
-    if (terminal.mouseExit) {
-      controller.mouseExited()
-      terminal.mouseExit = false
+    for(input <- terminal.input) {
+      controller.handle(input)
+      terminal.input = None
     }
   }
 

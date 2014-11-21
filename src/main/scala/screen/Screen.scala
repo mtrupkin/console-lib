@@ -1,7 +1,7 @@
 package console.screen
 
-import console.core.{Size, Point}
 import console.screen.RGBColor._
+import me.mtrupkin.geometry.{Point, Size}
 
 /**
  * User: mtrupkin

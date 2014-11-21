@@ -1,4 +1,4 @@
-package console.core
+package me.mtrupkin.geometry
 
 /**
  * User: mtrupkin

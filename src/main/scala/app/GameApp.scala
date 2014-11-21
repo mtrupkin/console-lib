@@ -5,10 +5,10 @@ package console.app
  * Date: 11/29/13
  */
 
-import console.core.Size
 import console.engine.GameEngine
 import console.terminal.SwingTerminal
 import console.controller.ControllerStateMachine
+import me.mtrupkin.geometry.Size
 
 
 // TODO: fix right grab for vertical layout

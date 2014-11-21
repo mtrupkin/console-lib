@@ -1,14 +1,16 @@
 package console.app
 
-import console.control.LayoutOp._
+import me.mtrupkin.console.layout._
+import me.mtrupkin.geometry._
 import console.controller.ControllerStateMachine
-import console.core.{Point, Size}
 import console.model.World
-import console.control._
+import me.mtrupkin.console.control._
 import console.screen.{RGBColor, ConsoleKey, Screen}
 
 trait Intro { self: ControllerStateMachine =>
   class IntroController extends ControllerState  {
+    val window = new Composite("window")
+
     var elapsed = 0
 
     val list = new Control {
@@ -72,9 +74,10 @@ trait Intro { self: ControllerStateMachine =>
       }
     }
     val listBoarder = new Composite(name = "list-border", border = Border.DOUBLE)
-    listBoarder.layout = Layout(right = SNAP, bottom = GRAB)
+    listBoarder.layout = Some(Layout(None, Pos.H_CENTER))
+
     listBoarder.addControl(list)
-    addControl(listBoarder)
+    window.addControl(listBoarder)
     //addControl(list)
 
     def update(elapsed: Int): Unit = {

@@ -1,11 +1,12 @@
 package console.controller
 
 import console.app.{Game, Intro}
-import console.core.{Point, Size}
-import console.control.LayoutOp._
-import console.control._
+import me.mtrupkin.console.control._
 import console.screen.{ConsoleKey, Screen}
 import console.state.StateMachine
+import me.mtrupkin.console.layout.{Orientation, Fill, Pos, Layout}
+import me.mtrupkin.geometry.{Point, Size}
+import me.mtrupkin.terminal.Input
 
 
 trait ControllerStateMachine extends StateMachine with Intro with Game {
@@ -22,21 +23,8 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
     screen
   }
 
-  def keyPressed(key: ConsoleKey): Unit = {
-    currentState.keyPressed(key)
-  }
-
-  def mouseMoved(mouse: Point): Unit = {
-    currentState.mouseMoved(mouse)
-  }
-
-  def mouseExited(): Unit = currentState.mouseExited()
-
-  def mouseEntered(): Unit = {
-  }
-
-  def mouseClick(mouse: Point): Unit = {
-    currentState.mouseClick(mouse)
+  def handle(input: Input): Unit = {
+    currentState.handle(input)
   }
 
   def resize(newSize: Size): Unit = {
@@ -44,43 +32,29 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
   }
 
   trait ControllerState extends State {
-    val window = new Composite("MainWindow", LayoutFlow.VERTICAL)
-    window.layout = Layout(right = GRAB, bottom = GRAB)
+    val window: Composite
     var mouse: Option[Point] = None
 
-    def addControl(control: Control): Unit = window.addControl(control)
-
     def update(elapsed: Int): Unit
+
     def render(screen: Screen): Unit = {
-//      for (m <- mouse) {
-//        screen.write(m.x, m.y, '+')
-//      }
       window.render(screen)
     }
 
-    def keyPressed(key: ConsoleKey): Unit = {
-      window.keyPressed(key)
-    }
+    def handle(input: Input): Unit = {
+      for (key <- input.key) {
+        window.keyPressed(key)
+      }
 
-    def mouseMoved(mouse: Point): Unit = {
-      window.mouseMoved(mouse)
+      for (mouse <- input.mouseMove) {
+        window.mouseMoved(mouse)
+      }
 
-      clearMouse()
-      this.mouse = Some(mouse)
-    }
+      for (mouse <- input.mouseClick) {
+        window.mouseClicked(mouse)
+      }
 
-    def mouseClick(mouse: Point): Unit = {
-      window.mouseClicked(mouse)
-    }
-
-    def mouseExited(): Unit = {
-      clearMouse()
-      this.mouse = None
-    }
-
-    def clearMouse(): Unit = {
-      for (m <- this.mouse) {
-        screen.clear(m.x, m.y)
+      for (mouse <- input.mouseExit) {
       }
     }
 

@@ -3,7 +3,8 @@ package console.terminal
 
 import java.awt.image.BufferStrategy
 
-import console.core.Size
+import me.mtrupkin.geometry.Size
+import me.mtrupkin.terminal.{Input, Terminal}
 
 import scala.swing.{BorderPanel, Frame}
 import scala.swing.event.{KeyReleased, Key, KeyPressed}
@@ -16,19 +17,6 @@ import console.screen._
  * User: mtrupkin
  * Date: 7/5/13
  */
-trait Terminal {
-  val terminalSize: Size
-  var closed = false
-
-  var key: Option[ConsoleKey] = None
-  var mouse: Option[console.core.Point] = None
-  var mouseClick: Option[console.core.Point] = None
-  var mouseExit: Boolean = false
-
-  def render(screen: Screen)
-  def close()
-}
-
 
 class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: String = "Swing Terminal") extends Frame with Terminal {
   val terminalCanvas = new TerminalCanvas(terminalSize)
@@ -42,13 +30,16 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
   visible = true
   resizable = false
 
+  def setInput(input: Input): Unit = this.input = Some(input)
+
   class TerminalKeyAdapter extends KeyAdapter {
     override def keyPressed(e: KeyEvent) {
       val modifiers = new ConsoleKeyModifier(e.isShiftDown, e.isAltDown, e.isControlDown)
-      key = Some(new ConsoleKey( Key(e.getKeyCode),modifiers ))
+      val key = Some(new ConsoleKey( Key(e.getKeyCode),modifiers ))
+      setInput(Input(key))
     }
 
-    override def keyReleased(e: KeyEvent) { key = None }
+    override def keyReleased(e: KeyEvent) { }
   }
 
   val keyListener = new TerminalKeyAdapter
@@ -86,29 +77,25 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
   val charSize = terminalCanvas.charSize(terminalCanvas.getGraphics)
 
   val mouseAdapter = new MouseAdapter {
-    def textPosition(e: MouseEvent): (Int, Int) = {
-      val x: Int = e.getX / charSize.width
-      val y: Int = e.getY / charSize.height
-      (x, y)
+    def textPosition(e: MouseEvent): Option[me.mtrupkin.geometry.Point] = {
+      Some(me.mtrupkin.geometry.Point(e.getX / charSize.width, e.getY / charSize.height))
     }
+
     override def mouseMoved(e: MouseEvent) {
-      val (x, y) = textPosition(e)
-      mouse = Some(new console.core.Point(x, y))
+      setInput(Input(mouseMove = textPosition(e)))
     }
 
     override def mouseClicked(e: MouseEvent): Unit = {
-      val (x, y) = textPosition(e)
-      mouseClick = Some(new console.core.Point(x, y))
+      setInput(Input(mouseClick = textPosition(e)))
     }
 
     override def mouseExited(e: MouseEvent): Unit = {
-      mouseExit = true
+      setInput(Input(mouseExit = textPosition(e)))
     }
   }
 
   terminalCanvas.addMouseListener(mouseAdapter)
   terminalCanvas.addMouseMotionListener(mouseAdapter)
-
 
   def render(screen: Screen) {
     if (!closed) {

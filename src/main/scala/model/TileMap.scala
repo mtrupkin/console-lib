@@ -1,7 +1,7 @@
 package console.model
 
-import console.core.{Size, Point}
 import console.screen.{RGBColor, ScreenChar}
+import me.mtrupkin.geometry.{Point, Size}
 import scala.Array._
 
 /**
