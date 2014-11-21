@@ -12,7 +12,21 @@ import me.mtrupkin.console.layout._
 
 trait Game { self: ControllerStateMachine =>
   class GameController(val world: World) extends ControllerState {
-    val window = new Composite(name = "window", layoutFlow = Orientation.VERTICAL)
+    val window = new Composite(name = "window", layoutFlow = Orientation.VERTICAL) {
+      override def keyPressed(key: ConsoleKey) {
+        import scala.swing.event.Key._
+
+        key.keyValue match {
+          case W | Up => world.player.move(Point.Up)
+          case A | Left => world.player.move(Point.Left)
+          case S | Down => world.player.move(Point.Down)
+          case D | Right => world.player.move(Point.Right)
+          case Enter => ???
+          case Escape => changeState(new IntroController)
+          case _ =>
+        }
+      }
+    }
 
     val topPanel = new Composite(name = "topPanel", border = new Border(box = Box.SINGLE_TEE_BOTTOM, divider = Divider.DOUBLE))//border = Border.SINGLE)
     topPanel.layout = Layout.FILL_RIGHT
@@ -61,27 +75,6 @@ trait Game { self: ControllerStateMachine =>
 
     def update(elapsed: Int) {
       world.update(elapsed)
-
-      if (endGame) {
-        changeState(new IntroController)
-      }
-    }
-
-    //
-    var endGame = false
-
-    def keyPressed(key: ConsoleKey) {
-      import scala.swing.event.Key._
-
-      key.keyValue match {
-        case W | Up => world.player.move(Point.Up)
-        case A | Left => world.player.move(Point.Left)
-        case S | Down => world.player.move(Point.Down)
-        case D | Right => world.player.move(Point.Right)
-        case Enter => ???
-        case Escape => endGame = true
-        case _ =>
-      }
     }
   }
 }
