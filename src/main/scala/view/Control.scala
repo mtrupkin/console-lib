@@ -70,7 +70,7 @@ trait Control {
     for(vPos <- pos.vPos) {
       vPos match {
         case TOP => position = position.copy(y = 0)
-        case VPos.CENTER => position = position.copy(y = (size.width - dimension.width) / 2)
+        case VPos.CENTER => position = position.copy(y = (size.height - dimension.height) / 2)
         case BOTTOM => position = position.copy(y = size.height - dimension.height)
       }
     }

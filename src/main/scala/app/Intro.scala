@@ -10,6 +10,7 @@ import console.screen.{RGBColor, ConsoleKey, Screen}
 trait Intro { self: ControllerStateMachine =>
   class IntroController extends ControllerState  {
     val window = new Composite("window")
+    window.layout = Layout.FILL
 
     var elapsed = 0
 
@@ -75,7 +76,7 @@ trait Intro { self: ControllerStateMachine =>
       }
     }
     val listBoarder = new Composite(name = "list-border", border = Border.DOUBLE)
-    listBoarder.layout = Some(Layout(None, Pos.H_CENTER))
+    listBoarder.layout = Some(Layout(None, Pos.CENTER))
 
     listBoarder.addControl(list)
     window.addControl(listBoarder)
