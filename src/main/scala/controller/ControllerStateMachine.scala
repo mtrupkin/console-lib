@@ -15,6 +15,7 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
 
   var size: Size = initialSize
   var screen = Screen(size)
+  var closed = false
 
   initialState.onEnter()
 

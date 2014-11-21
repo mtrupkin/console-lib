@@ -12,7 +12,7 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
   val updatesPerSecond = 100
   val updateRate = (1f / updatesPerSecond) * 1000
 
-  def completed(): Boolean = terminal.closed
+  def completed(): Boolean = (terminal.closed || controller.closed)
 
   def render() {
     if (!completed()) {
@@ -60,5 +60,7 @@ class GameEngine(controller: ControllerStateMachine, terminal: Terminal)  {
         updates = 0
       }
     }
+
+    terminal.close()
   }
 }

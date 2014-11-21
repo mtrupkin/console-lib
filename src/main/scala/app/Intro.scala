@@ -71,6 +71,7 @@ trait Intro { self: ControllerStateMachine =>
       }
 
       def exitGame(): Unit = {
+        closed = true
       }
     }
     val listBoarder = new Composite(name = "list-border", border = Border.DOUBLE)
