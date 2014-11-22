@@ -25,8 +25,13 @@ object GameApp extends App {
   //val engine = new GameEngine(ControllerStateMachine, terminal)
   //engine.gameLoop()
 
-  val screenMap = ScreenMap.load()
-  ScreenMap.save(screenMap.copy(name = "test2"))
+  //val screenMap = ScreenMap.load()
+  //ScreenMap.save(screenMap.copy(name = "test2"))
+  //ScreenMap.saveConsole(screenMap.copy(name = "test2"))
+
+  val screenMap2 = ScreenMap.loadConsole()
+
+  ScreenMap.save(screenMap2)
 }
 
 

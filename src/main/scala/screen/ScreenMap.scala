@@ -15,9 +15,10 @@ case class ScreenMap(name: String, width: Int, height: Int, matrix: Seq[Seq[Scre
 }
 
 object ScreenMap {
-  val inputFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test2.xp"
-  val uncOutputFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test2.unc.xp"
-  val outputFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test3.xp"
+  val inputFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test1a.xp"
+  val uncOutputFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test1a.unc.xp"
+  val outputFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test1a.out.xp"
+  val outputXPMFilename = "C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test1a.xpm"
 
   class LittleEndianDataInputStream(i: InputStream) extends DataInputStream(i) {
     def readLongLE(): Long = java.lang.Long.reverseBytes(super.readLong())
@@ -54,11 +55,13 @@ object ScreenMap {
   }
 
   def readMatrix(is: LittleEndianDataInputStream, width: Int, height: Int): Seq[Seq[ScreenChar]] = {
-    for {
-      i <- 0 until height
+    val m = for {
+      i <- 0 until width
     } yield for {
-      j <- 0 until width
+      j <- 0 until height
     } yield readScreenChar(is)
+
+    changeAxis(m, Nil)
   }
 
   def readScreenChar(is: LittleEndianDataInputStream): ScreenChar = ScreenChar(is.readIntLE().toChar, readRGBColor(is), readRGBColor(is))
@@ -84,7 +87,9 @@ object ScreenMap {
   }
 
   def writeMatrix(matrix: Seq[Seq[ScreenChar]], os: LittleEndianDataOutputStream): Unit = {
-    for (row <- matrix) {
+    val m = changeAxis(matrix, Nil)
+
+    for (row <- m) {
       for (cell <- row) {
         writeScreenChar(cell, os)
       }
@@ -103,22 +108,62 @@ object ScreenMap {
     os.writeByte(c.b)
   }
 
-  def saveXML(screenMap: ScreenMap): Unit = {
-    val marshalled =
-<image>
-  <name>{screenMap.name}</name>
-  <width>{screenMap.width}</width>
-  <height>{screenMap.height}</height>
-  <data>
-    {for (row <- screenMap.matrix) yield
-    <row>
-      {for (cell <- row) yield
-        <cell><ascii>{cell.c.toInt}</ascii><fgd>{cell.fg.toHexString}</fgd><bkg>{cell.bg.toHexString}</bkg></cell>
-      }
-    </row>}
-  </data>
-</image>
+  def saveConsole(screenMap: ScreenMap): Unit = {
+    val writer = Files.newBufferedWriter(Paths.get(outputXPMFilename), StandardOpenOption.CREATE)
 
-    scala.xml.XML.save("C:\\Users\\mtrupkin\\Downloads\\REXPaint_v0.99r9\\REXPaint-R9\\images\\test2.xml", marshalled)
+    writer.write("! CONSOLE v0.0.1")
+    writer.newLine()
+    writer.write(s"${screenMap.width} ${screenMap.height}")
+    writer.newLine()
+
+    for (row <- screenMap.matrix) {
+      for (cell <- row) {
+        writer.write(cell.c)
+      }
+      writer.newLine()
+    }
+
+    writer.close()
+  }
+
+  def loadConsole(): ScreenMap = {
+    val reader = Files.newBufferedReader(Paths.get(outputXPMFilename))
+    reader.readLine() // ignore first line
+    val s = reader.readLine().split(" ")
+    val width = Integer.parseInt(s(0))
+    val height = Integer.parseInt(s(1))
+
+    var line: Option[String] = None
+
+    var matrix: Seq[Seq[ScreenChar]] = Nil
+
+    do {
+      line = Option(reader.readLine())
+
+      for {
+        s <- line
+      } yield {
+        matrix = matrix :+ s.map(c => ScreenChar(c, RGBColor.White, RGBColor.Black))
+      }
+
+    } while (line != None)
+
+    ScreenMap("test2", width, height, matrix)
+  }
+
+  def changeAxis(m: Seq[Seq[ScreenChar]], acc: Seq[Seq[ScreenChar]]): Seq[Seq[ScreenChar]] = {
+    if (!m.head.isEmpty) {
+      val row = for {
+        first <- m
+      } yield first.head
+
+      val remainder = for {
+        first <- m
+      } yield first.tail
+
+      changeAxis(remainder, acc :+ row)
+    } else {
+      acc
+    }
   }
 }
