@@ -21,17 +21,12 @@ object GameApp extends App {
     lazy val initialState: ControllerState = new IntroController
   }
 
-  //val terminal = new SwingTerminal(size, "Danger Room")
-  //val engine = new GameEngine(ControllerStateMachine, terminal)
-  //engine.gameLoop()
+  val terminal = new SwingTerminal(size, "Danger Room")
+  val engine = new GameEngine(ControllerStateMachine, terminal)
+  engine.gameLoop()
 
-  //val screenMap = ScreenMap.load()
-  //ScreenMap.save(screenMap.copy(name = "test2"))
-  //ScreenMap.saveConsole(screenMap.copy(name = "test2"))
-
-  val screenMap2 = ScreenMap.loadConsole()
-
-  ScreenMap.save(screenMap2)
+//  val screenMap2 = ScreenMap.readXP("C:\\dev\\REXPaint-R9\\images\\test2.xp")
+//  ScreenMap.writeConsole("C:\\dev\\REXPaint-R9\\images\\test2.xpm", screenMap2)
 }
 
 

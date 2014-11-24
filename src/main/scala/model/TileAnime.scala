@@ -55,8 +55,8 @@ class FrameAnime(val frames: List[ScreenChar], val cycleTime: Int = 500) extends
 
 class SparkleAnime(val sc: ScreenChar, val frequency: Int = 1, val duration: Int = 500) extends TileAnime {
   var sparkleOn: Boolean = false
-  val sparkleOnChar: ScreenChar = ScreenChar('.')
-  val delay = Random.nextInt(1000)
+  val sparkleOnChar: ScreenChar = ScreenChar('.', RGBColor.LightGrey)
+  val delay = Random.nextInt(10000)
 
   def animate(elapsed: Int): ScreenChar = {
     if (sparkleOn) {
@@ -66,7 +66,7 @@ class SparkleAnime(val sc: ScreenChar, val frequency: Int = 1, val duration: Int
       }
       sparkleOnChar
     } else {
-      if (totalElapsedTime + delay > 1000) {
+      if (totalElapsedTime + delay > 10000) {
         if (Random.nextInt(1000) < frequency) sparkleOn = true
         totalElapsedTime = 0
       }

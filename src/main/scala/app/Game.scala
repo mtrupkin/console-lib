@@ -5,7 +5,7 @@ import console.map.MapWidget
 import console.model.World
 import me.mtrupkin.console.control._
 import console.screen.{ConsoleKey, Screen}
-import me.mtrupkin.geometry.{Point, Size}
+import me.mtrupkin.geometry.{PointImplicits, Point, Size}
 import me.mtrupkin.console.layout._
 
 // Created on 11/6/2014.
@@ -15,12 +15,12 @@ trait Game { self: ControllerStateMachine =>
     val window = new Composite(name = "window", layoutFlow = Orientation.VERTICAL) {
       override def keyPressed(key: ConsoleKey) {
         import scala.swing.event.Key._
-
+        val player = world.player
         key.keyValue match {
-          case W | Up => world.player.move(Point.Up)
-          case A | Left => world.player.move(Point.Left)
-          case S | Down => world.player.move(Point.Down)
-          case D | Right => world.player.move(Point.Right)
+          case W | Up => world.move(player, Point.Up)
+          case A | Left => world.move(player, Point.Left)
+          case S | Down => world.move(player, Point.Down)
+          case D | Right => world.move(player, Point.Right)
           case Enter => ???
           case Escape => changeState(new IntroController)
           case _ =>
@@ -37,8 +37,13 @@ trait Game { self: ControllerStateMachine =>
     val mainBorder = new Border(box = Box.DOUBLE, sides = BorderSides(left = false, top = false, bottom = false))
     val mainPanel = new Composite(name = "mainPanel")
 
-    val mapPanel = new MapWidget(world) {
-      def onSelection = {
+    val mapPanel = new MapWidget(world.tileMap) {
+      def onSelection(): Unit = {}
+
+      override def render(screen: Screen): Unit = {
+        super.render(screen)
+        val p = world.player.position
+        screen.write(p.x, p.y, '@')
       }
     }
     mainPanel.addControl(mapPanel)

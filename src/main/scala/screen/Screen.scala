@@ -26,6 +26,10 @@ trait Screen {
     ) f(i, j, this(i, j))
   }
 
+  def write(p: (Int, Int), c: Char): Unit = {
+    write(p._1, p._2, c)
+  }
+
   def write(x: Int, y: Int, c: Char): Unit = {
     this(x, y) = ScreenChar(c, fg, bg)
   }

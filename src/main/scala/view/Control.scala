@@ -18,7 +18,7 @@ trait Control {
   def right: Int = position.x + dimension.width
   def bottom: Int = position.y + dimension.height
 
-  def render(screen: Screen)
+  def render(screen: Screen): Unit
 
   def keyPressed(key: ConsoleKey): Unit = {}
   def mouseClicked(mouse: Point): Unit = {}
