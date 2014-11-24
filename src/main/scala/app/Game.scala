@@ -59,6 +59,7 @@ trait Game { self: ControllerStateMachine =>
         screen.write(s"${world.time}")
       }
     }
+
     val label2 = new Control {
       override def minSize = Size(20, 1)
       override def render(screen: Screen): Unit = {

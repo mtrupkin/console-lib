@@ -1,4 +1,4 @@
-package me.trupkin.tile
+package me.mtrupkin.tile
 
 import java.io._
 import java.nio.{ByteOrder, ByteBuffer}
