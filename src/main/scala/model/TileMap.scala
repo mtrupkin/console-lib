@@ -3,8 +3,9 @@ package console.model
 import console.screen.{RGBColor, ScreenChar}
 import me.mtrupkin.geometry.{Point, Size}
 import me.mtrupkin.tile.{Floor, Tile, TileMap}
-import me.trupkin.tile.{ScreenMap, TileLegend}
-import scala.Array._
+import me.mtrupkin.tile.{ScreenMap, TileLegend}
+
+
 
 /**
  * Created by mtrupkin on 4/6/2014.
@@ -33,6 +34,14 @@ class World {
   def update(elapsed: Int) {
     time += elapsed
     tileMap.update(elapsed)
+  }
+
+  def act(entity: Entity, direction: Point): Unit = {
+    val p = entity.position + direction
+    tileMap(p.x, p.y) match {
+      case f: Floor => move(entity, direction)
+    }
+
   }
 
   def move(entity: Entity, direction: Point): Unit = {
