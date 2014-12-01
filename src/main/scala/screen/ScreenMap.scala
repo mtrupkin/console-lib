@@ -5,8 +5,8 @@ import java.nio.{ByteOrder, ByteBuffer}
 import java.nio.file._
 import java.util.zip.{GZIPOutputStream, GZIPInputStream}
 
-import console.screen.{RGBColor, ScreenChar}
-import org.apache.commons.io.IOUtils
+import me.mtrupkin.console.screen.{RGBColor, ScreenChar}
+
 
 // Created on 11/21/2014.
 
@@ -55,7 +55,7 @@ object ScreenMap {
     }
   }
 
-  def readXP(filename: String): ScreenMap = {
+  def readXP(name: String, is: InputStream): ScreenMap = {
     class LittleEndianDataInputStream(i: InputStream) extends DataInputStream(i) {
       def readLongLE(): Long = java.lang.Long.reverseBytes(super.readLong())
       def readIntLE(): Int = java.lang.Integer.reverseBytes(super.readInt())
@@ -76,8 +76,7 @@ object ScreenMap {
     def readScreenChar(is: LittleEndianDataInputStream): ScreenChar = ScreenChar(getAscii(is.readIntLE().toChar), readRGBColor(is), readRGBColor(is))
     def readRGBColor(is: DataInputStream): RGBColor = RGBColor(is.readByte() & 0xff, is.readByte() & 0xff, is.readByte() & 0xff)
 
-    val path = Paths.get(filename)
-    val gzipInput = new GZIPInputStream(Files.newInputStream(path))
+    val gzipInput = new GZIPInputStream(is)
     val dataInput = new LittleEndianDataInputStream(gzipInput)
 
     val version = dataInput.readIntLE()
@@ -89,7 +88,7 @@ object ScreenMap {
 
     gzipInput.close()
 
-    ScreenMap(path.getFileName().toString, width, height, matrix)
+    ScreenMap(name, width, height, matrix)
   }
 
 

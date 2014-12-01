@@ -1,18 +1,30 @@
 package console.model
 
-import console.screen.ScreenChar
+import me.mtrupkin.console.screen.ScreenChar
 import me.mtrupkin.geometry.Point
 
 // Created: 4/8/2014
 
-class Entity(
-  val name: String,
-  var position: Point,
-  val sc: ScreenChar) {
-  def move(p: Point) { position = position + p }
+trait Entity {
+  val name: String
+  def sc: ScreenChar
+  def position: Point
+  def hitPoints: Int
 }
 
-class Player(name: String, p: Point, sc: ScreenChar)
-  extends Entity(name, p, sc) {
+class Agent(
+  val name: String,
+  val sc: ScreenChar,
+  var position: Point,
+  var hitPoints: Int) extends Entity {
 
+}
+
+class Player(name: String, sc: ScreenChar, p: Point, hp: Int)
+  extends Agent (name, sc, p, hp) {
+  def move(direction: Point) { position = position + direction }
+}
+
+object Agent {
+  def createTurret(start: Point): Agent = new Agent("turret", ScreenChar('T'), start, 3)
 }

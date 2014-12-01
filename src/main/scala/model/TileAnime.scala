@@ -1,6 +1,6 @@
 package console.model
 
-import console.screen.{RGBColor, ScreenChar}
+import me.mtrupkin.console.screen.{RGBColor, ScreenChar}
 import scala.util.Random
 
 // Created: 4/10/2014

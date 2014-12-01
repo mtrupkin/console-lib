@@ -1,6 +1,6 @@
 package me.mtrupkin.console.control
 
-import console.screen.{Screen, ASCII}
+import me.mtrupkin.console.screen.{Screen, ASCII}
 
 import me.mtrupkin.geometry.{Point, Size}
 

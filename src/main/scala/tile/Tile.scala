@@ -1,8 +1,9 @@
 package me.mtrupkin.tile
 
 import console.model._
-import console.screen.{RGBColor, ScreenChar}
+import me.mtrupkin.console.screen.{RGBColor, ScreenChar}
 import me.mtrupkin.geometry.{Point, Size}
+import me.mtrupkin.geometry.PointImplicits._
 
 import scala.Array._
 
@@ -20,6 +21,8 @@ trait TileMap {
   def apply(x: Int, y: Int): Tile
   def foreach(f: (Int, Int, Tile) => Unit ) = size.foreach((x,y) => f(x, y, this(x, y)))
   def update(elapsed: Int): Unit = size.foreach((x, y) => this(x, y).update(elapsed))
+  def move(x: Int, y: Int): Boolean = size.inBounds((x,y)) && this(x, y).move
+  //def move(entity: Entity, x: Int, y: Int): Boolean = size.inBounds((x,y)) && this(x, y).move
 
   def wipe() {
     size.foreach((x, y) => {

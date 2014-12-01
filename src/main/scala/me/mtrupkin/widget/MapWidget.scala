@@ -1,8 +1,7 @@
-package console.map
-
+package widget
 
 import me.mtrupkin.console.control.Control
-import console.screen.Screen
+import me.mtrupkin.console.screen.Screen
 import me.mtrupkin.tile.TileMap
 
 /**

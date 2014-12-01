@@ -1,4 +1,4 @@
-package console.screen
+package me.mtrupkin.console.screen
 
 /**
  * User: mtrupkin
@@ -10,6 +10,12 @@ object ConsoleKey extends Enumeration {
   val Alt = Value("Alt")
 }
 
-case class ConsoleKeyModifier(shift: Boolean, control: Boolean, alt: Boolean)
+case class Modifier(shift: Boolean, control: Boolean, alt: Boolean)
 
-case class ConsoleKey(keyValue: scala.swing.event.Key.Value, modifier: ConsoleKeyModifier)
+case class ConsoleKey(keyValue: scala.swing.event.Key.Value, modifier: Modifier)
+
+object ConsoleKeyModifier {
+  val Shift = Modifier(true, false, false)
+  val Control = Modifier(false, true, false)
+  val Alt = Modifier(false, false, true)
+}

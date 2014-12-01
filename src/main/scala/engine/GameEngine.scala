@@ -1,6 +1,6 @@
 package console.engine
 
-import console.controller.ControllerStateMachine
+import me.mtrupkin.console.controller.ControllerStateMachine
 import me.mtrupkin.terminal.Terminal
 
 /**

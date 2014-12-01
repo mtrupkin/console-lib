@@ -1,15 +1,23 @@
-package console.controller
+package me.mtrupkin.console.controller
 
-import console.app.{Game, Intro}
+import controller._
 import me.mtrupkin.console.control._
-import console.screen.{ConsoleKey, Screen}
+import me.mtrupkin.console.screen.{ConsoleKey, Screen}
 import console.state.StateMachine
 import me.mtrupkin.console.layout.{Orientation, Fill, Pos, Layout}
 import me.mtrupkin.geometry.{Point, Size}
 import me.mtrupkin.terminal.Input
 
 
-trait ControllerStateMachine extends StateMachine with Intro with Game {
+trait ControllerStateMachine extends StateMachine
+    with Intro
+    with Game
+    with EscapeMenu
+    with Options
+    with Help
+    with LoadGame
+    with SaveGame
+{
   type StateType = ControllerState
   def initialSize: Size
 
@@ -62,6 +70,12 @@ trait ControllerStateMachine extends StateMachine with Intro with Game {
     override def onEnter(): Unit = {
       window.arrange(size)
       screen.clear()
+    }
+
+    def defaultWindow(): Composite = {
+      val w = new Composite("window")
+      w.layout = Layout.FILL
+      w
     }
   }
 }

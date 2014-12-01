@@ -7,9 +7,9 @@ package console.app
 
 import console.engine.GameEngine
 import console.terminal.SwingTerminal
-import console.controller.ControllerStateMachine
+import me.mtrupkin.console.controller.ControllerStateMachine
 import me.mtrupkin.geometry.Size
-import me.trupkin.tile.ScreenMap
+import me.mtrupkin.tile.ScreenMap
 
 
 // TODO: fix right grab for vertical layout

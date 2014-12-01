@@ -1,6 +1,6 @@
-package console.screen
+package me.mtrupkin.console.screen
 
-import console.screen.RGBColor._
+import me.mtrupkin.console.screen.RGBColor._
 import me.mtrupkin.geometry.{Point, Size}
 
 /**
@@ -24,6 +24,13 @@ trait Screen {
       i <- 0 until size.width;
       j <- 0 until size.height
     ) f(i, j, this(i, j))
+  }
+
+  def transform(f: (ScreenChar) => ScreenChar ): Unit = {
+    for (
+      i <- 0 until size.width;
+      j <- 0 until size.height
+    ) this(i, j) = f(this(i, j))
   }
 
   def write(p: (Int, Int), c: Char): Unit = {

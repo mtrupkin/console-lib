@@ -1,4 +1,4 @@
-package console.screen
+package me.mtrupkin.console.screen
 
 /**
  * Some text graphics, taken from http://en.wikipedia.org/wiki/Codepage_437

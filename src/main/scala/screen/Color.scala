@@ -1,4 +1,4 @@
-package console.screen
+package me.mtrupkin.console.screen
 
 /**
  * User: mtrupkin

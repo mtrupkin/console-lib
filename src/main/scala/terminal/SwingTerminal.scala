@@ -10,7 +10,7 @@ import scala.swing.{BorderPanel, Frame}
 import scala.swing.event.{KeyReleased, Key, KeyPressed}
 import java.awt.event.{MouseEvent, MouseAdapter, KeyEvent, KeyAdapter}
 import java.awt._
-import console.screen._
+import me.mtrupkin.console.screen._
 
 
 /**
@@ -34,7 +34,7 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
 
   class TerminalKeyAdapter extends KeyAdapter {
     override def keyPressed(e: KeyEvent) {
-      val modifiers = new ConsoleKeyModifier(e.isShiftDown, e.isAltDown, e.isControlDown)
+      val modifiers = new Modifier(e.isShiftDown, e.isControlDown, e.isAltDown)
       val key = Some(new ConsoleKey( Key(e.getKeyCode),modifiers ))
       setInput(Input(key))
     }
@@ -217,7 +217,7 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
     }
   }
 
-  import console.screen.RGBColor._
+  import me.mtrupkin.console.screen.RGBColor._
 
   def toAwtColor(c: RGBColor): java.awt.Color = {
     c match {
@@ -232,7 +232,7 @@ class SwingTerminal(val terminalSize: Size = new Size(50, 20), windowTitle: Stri
       case LightBlue => AwtColor.LightBlue
       case LightRed => AwtColor.LightRed
       case LightGrey => AwtColor.LightGrey
-      case _ =>  ???
+      case _ =>  AwtColor.getAwtColor(c)
     }
   }
 }
@@ -244,7 +244,16 @@ object AwtColor {
   val LightGreen = getAwtColor(RGBColor.LightGreen)
   val LightGrey = getAwtColor(RGBColor.LightGrey)
 
-  def getAwtColor(c: console.screen.RGBColor): java.awt.Color = new java.awt.Color(c.r, c.g, c.b)
+  var awtColors: scala.List[java.awt.Color] = scala.List()
+
+  def getAwtColor(c: me.mtrupkin.console.screen.RGBColor): java.awt.Color = {
+//    awtColors.find( p => (p.getRed == c.r) && (p.getGreen == c.g) && (p.getBlue == c.b)).getOrElse( {
+//      val newColor = new java.awt.Color(c.r, c.g, c.b)
+//      awtColors = newColor :: awtColors
+//      newColor
+//    })
+    new java.awt.Color(c.r, c.g, c.b)
+  }
 }
 
 

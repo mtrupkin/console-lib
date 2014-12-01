@@ -1,6 +1,9 @@
 package me.mtrupkin.tile
 
-import console.screen.ScreenChar
+import java.nio.file.{Files, Paths}
+import java.util.zip.GZIPInputStream
+
+import me.mtrupkin.console.screen.ScreenChar
 import me.mtrupkin.geometry.Size
 import me.mtrupkin.tile._
 
@@ -11,21 +14,19 @@ import me.mtrupkin.tile._
 object TileLegend {
   def toTile(s: ScreenChar): Tile = {
     s.c match {
-      case 'S'  => new Floor
       case ' ' | '.' => new Floor
-      case 'T'  => new Floor
       case _ => new Wall(s)
     }
   }
 
   def load(): TileMap = {
-    //val screenMap = ScreenMap.readConsole("C:\\dev\\REXPaint-R9\\images\\test2.xpm")
-    val screenMap = ScreenMap.readXP("C:\\dev\\REXPaint-R9\\images\\level-1.xp")
+    val levelName = "level-1"
+    val is = getClass.getResourceAsStream(s"/maps/$levelName.xp")
+    val screenMap = ScreenMap.readXP(levelName, is)
 
     val tileMap = new TileMapImpl(Size(screenMap.width, screenMap.height)) {}
-    for(i <- screenMap.matrix.zipWithIndex) {
-      for(j <- (i._1).zipWithIndex) {
-        val (x, y, t) = (i._2, j._2, j._1)
+    for((i, x) <- screenMap.matrix.zipWithIndex) {
+      for((t, y) <- i.zipWithIndex) {
         tileMap.tiles(x)(y) = TileLegend.toTile(t)
       }
     }

@@ -7,18 +7,39 @@ trait StateMachine {
 
   def initialState: StateType
 
+  private var previousStates: List[StateType] = List()
   private var _currentState = initialState
   def currentState: StateType = _currentState
 
   trait State {
     def update(elapsed: Int): Unit
+
+    def flipState(newState: StateType): Unit = {
+      previousStates = currentState :: previousStates
+      updateState(newState)
+    }
+
+    def onEnter(): Unit = {}
+    def onExit(): Unit = {}
+
+    def previousState(): StateType = previousStates.head
+
+    def revertState(): Unit = {
+      val previousState = previousStates.head
+      previousStates = previousStates.tail
+      updateState(previousState)
+    }
+
     def changeState(newState: StateType): Unit = {
+      previousStates = List()
+      updateState(newState)
+    }
+
+    private def updateState(newState: StateType): Unit = {
       currentState.onExit()
       _currentState = newState
       currentState.onEnter()
     }
-    def onEnter(): Unit = {}
-    def onExit(): Unit = {}
   }
 
   def update(elapsed: Int) = {

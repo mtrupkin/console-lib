@@ -1,6 +1,6 @@
 package me.mtrupkin.terminal
 
-import console.screen.{Screen, ConsoleKey}
+import me.mtrupkin.console.screen.{Screen, ConsoleKey}
 import me.mtrupkin.geometry.Size
 
 // Created on 11/20/2014.
