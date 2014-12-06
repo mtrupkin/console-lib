@@ -74,17 +74,22 @@ trait Game { self: ControllerStateMachine =>
         screen.write(s"${world.time}")
       }
     }
-
     val label2 = new Control {
       override def minSize = Size(20, 1)
       override def render(screen: Screen): Unit = {
-        screen.write("label 2")
+        screen.write(s"STR: ${world.player.str}")
       }
     }
     val label3 = new Control {
       override def minSize = Size(20, 1)
       override def render(screen: Screen): Unit = {
-        screen.write("label 3")
+        screen.write(s"DEX: ${world.player.dex}")
+      }
+    }
+    val label4 = new Control {
+      override def minSize = Size(20, 1)
+      override def render(screen: Screen): Unit = {
+        screen.write(s"INT: ${world.player.int}")
       }
     }
 
@@ -92,7 +97,7 @@ trait Game { self: ControllerStateMachine =>
     window.addControl(bottomPanel)
 
     topPanel.addControls(Seq(mainPanel, detailPanel))
-    detailPanel.addControls(Seq(label1,label2,label3))
+    detailPanel.addControls(Seq(label1,label2,label3,label4))
 
     def update(elapsed: Int) {
       world.update(elapsed)

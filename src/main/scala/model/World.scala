@@ -39,7 +39,12 @@ class World(
   }
 
   def attack(a: Agent): Unit = {
-    a.hitPoints = a.hitPoints - 1
+    attack(player, a)
+  }
+
+  def attack(attacker: Agent, defender: Agent): Unit = {
+    val damage = Combat.combat(attacker.melee, defender.melee)
+    defender.hitPoints = defender.hitPoints - damage
     agents = agents.filter(a => a.hitPoints > 0)
   }
 }
@@ -63,7 +68,7 @@ object World {
       }
     }
 
-    val player: Player = new Player("player", ScreenChar('@'), playerStart, 100)
+    val player: Player = Player("player", ScreenChar('@'), playerStart)
     new World(0, player, agents)
   }
 }
@@ -89,7 +94,7 @@ class World2 {
     }
   }
 
-  val player: Player = new Player("player", ScreenChar('@'), playerStart, 100)
+  val player: Player = Player("player", ScreenChar('@'), playerStart)
 
   def update(elapsed: Int) {
     time += elapsed
@@ -111,7 +116,7 @@ class World2 {
 
   def attack(a: Agent): Unit = {
     a.hitPoints = a.hitPoints - 1
-    agents = agents.filter(a => a.hitPoints > 0)
+    agents = agents.filter(a => a.hitPoints >= 0)
   }
 
   tileMap.wipe()

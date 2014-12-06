@@ -32,7 +32,7 @@ object Saves {
     }
 
     implicit object AgentFormat extends Format[Agent] {
-      def reads(json: JsValue): JsResult[Agent] = JsSuccess(new Agent(
+      def reads(json: JsValue): JsResult[Agent] = JsSuccess( Agent(
         (json \ "name").as[String],
         (json \ "sc").as[ScreenChar],
         (json \ "position").as[Point],
@@ -47,7 +47,7 @@ object Saves {
     }
 
     implicit object PlayerFormat extends Format[Player] {
-      def reads(json: JsValue): JsResult[Player] = JsSuccess(new Player(
+      def reads(json: JsValue): JsResult[Player] = JsSuccess(Player(
         (json \ "name").as[String],
         (json \ "sc").as[ScreenChar],
         (json \ "position").as[Point],
