@@ -40,6 +40,11 @@ trait Screen {
   def write(x: Int, y: Int, c: Char): Unit = {
     this(x, y) = ScreenChar(c, fg, bg)
   }
+
+  def write(x: Int, y: Int, sc: ScreenChar): Unit = {
+    this(x, y) = sc
+  }
+
   def write(s: String): Unit = write(0, 0, s)
 
   def subScreen(origin: Point, size: Size): Screen = new SubScreen(origin, size, this)
