@@ -50,7 +50,7 @@ trait Game { self: ControllerStateMachine =>
 
       def renderAgent(screen: Screen, agent: Agent): Unit = {
         val p = agent.position
-        screen.write(p.x, p.y, agent.sc.c)
+        screen.write(p.x, p.y, agent.sc)
       }
 
       override def render(screen: Screen): Unit = {

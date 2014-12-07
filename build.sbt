@@ -11,8 +11,8 @@ organization := "org.trupkin"
 scalaVersion := "2.11.4"
 
 libraryDependencies ++= Seq(
-  "com.typesafe.play" %% "play-json" % "2.4.0-M1",
-  "org.scala-lang" % "scala-swing" % "2.11.4",
+  "com.typesafe.play" %% "play-json" % "2.4.0-M2",
+  "org.scala-lang" % "scala-swing" % "2.11.0-M7",
   "commons-io" % "commons-io" % "2.4"
 )
 

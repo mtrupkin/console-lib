@@ -16,7 +16,10 @@ import play.api.libs.json._
 object Saves {
   implicit object WorldFormat extends Format[World] {
     implicit val PointFormat = Json.format[Point]
-    implicit val RGBColorFormat = Json.format[RGBColor]
+    implicit object RGBColorFormat extends Format[RGBColor] {
+      def reads(json: JsValue): JsResult[RGBColor] = JsSuccess(RGBColor(json.as[String]))
+      def writes(u: RGBColor): JsValue = JsString(u.toString)
+    }
 
     implicit object ScreenCharFormat extends Format[ScreenChar] {
       def reads(json: JsValue): JsResult[ScreenChar] = JsSuccess(new ScreenChar(
@@ -106,7 +109,7 @@ object Saves {
       } while (aux != null)
 
 
-      val text = builder.toString();
+      val text = builder.toString()
       val js = Json.parse(text)
       Json.fromJson(js)(WorldFormat).getOrElse(throw new Exception)
 
