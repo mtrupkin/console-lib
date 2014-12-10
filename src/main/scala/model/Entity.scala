@@ -2,6 +2,7 @@ package console.model
 
 import me.mtrupkin.console.screen.ScreenChar
 import me.mtrupkin.geometry.Point
+import play.api.libs.json.Json
 import scala.util.Random
 
 // Created: 4/8/2014
@@ -30,6 +31,7 @@ class Agent(
 }
 
 object Agent {
+  //implicit val format = Json.format[Agent]
   def apply(name: String, sc: ScreenChar, p: Point, hp: Int): Agent = {
     val a = new Agent(name, sc, p)
     a.hitPoints = hp

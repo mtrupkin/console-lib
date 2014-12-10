@@ -16,23 +16,23 @@ import play.api.libs.json._
 object Saves {
   implicit object WorldFormat extends Format[World] {
     implicit val PointFormat = Json.format[Point]
-    implicit object RGBColorFormat extends Format[RGBColor] {
-      def reads(json: JsValue): JsResult[RGBColor] = JsSuccess(RGBColor(json.as[String]))
-      def writes(u: RGBColor): JsValue = JsString(u.toString)
-    }
+//    implicit object RGBColorFormat extends Format[RGBColor] {
+//      def reads(json: JsValue): JsResult[RGBColor] = JsSuccess(RGBColor(json.as[String]))
+//      def writes(u: RGBColor): JsValue = JsString(u.toString)
+//    }
 
-    implicit object ScreenCharFormat extends Format[ScreenChar] {
-      def reads(json: JsValue): JsResult[ScreenChar] = JsSuccess(new ScreenChar(
-        (json \ "c").as[String].charAt(0),
-        (json \ "fg").as[RGBColor],
-        (json \ "bg").as[RGBColor]))
-
-      def writes(u: ScreenChar): JsValue = JsObject(List(
-        "c" -> JsString(u.c.toString),
-        "fg" -> Json.toJson(u.fg),
-        "bg" -> Json.toJson(u.bg))
-      )
-    }
+//    implicit object ScreenCharFormat extends Format[ScreenChar] {
+//      def reads(json: JsValue): JsResult[ScreenChar] = JsSuccess(new ScreenChar(
+//        (json \ "c").as[String].charAt(0),
+//        (json \ "fg").as[RGBColor],
+//        (json \ "bg").as[RGBColor]))
+//
+//      def writes(u: ScreenChar): JsValue = JsObject(List(
+//        "c" -> JsString(u.c.toString),
+//        "fg" -> Json.toJson(u.fg),
+//        "bg" -> Json.toJson(u.bg))
+//      )
+//    }
 
     implicit object AgentFormat extends Format[Agent] {
       def reads(json: JsValue): JsResult[Agent] = JsSuccess( Agent(

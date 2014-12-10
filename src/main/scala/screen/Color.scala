@@ -1,5 +1,7 @@
 package me.mtrupkin.console.screen
 
+import play.api.libs.json._
+
 /**
  * User: mtrupkin
  * Date: 7/5/13
@@ -11,6 +13,11 @@ case class RGBColor(r: Int, g: Int, b:Int) {
 }
 
 object RGBColor {
+  implicit object RGBColorFormat extends Format[RGBColor] {
+    def reads(json: JsValue): JsResult[RGBColor] = JsSuccess(RGBColor(json.as[String]))
+    def writes(u: RGBColor): JsValue = JsString(u.toString)
+  }
+
   def apply(s: String): RGBColor = {
     def next(s0: String): String = {
       s0.substring(0, 2)

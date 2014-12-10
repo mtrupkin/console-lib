@@ -1,5 +1,7 @@
 package me.mtrupkin.geometry
 
+import play.api.libs.json.Json
+
 /**
  * User: mtrupkin
  * Date: 7/5/13
@@ -16,6 +18,7 @@ object PointImplicits {
 }
 
 object Point {
+  implicit val format = Json.format[Point]
   val Origin: Point = Point(0, 0)
   val Up: Point = Point(0, -1)
   val Down: Point = Point(0, 1)

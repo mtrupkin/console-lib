@@ -2,6 +2,7 @@ package me.mtrupkin.console.screen
 
 import me.mtrupkin.console.screen.RGBColor._
 import me.mtrupkin.geometry.{Point, Size}
+import play.api.libs.json._
 
 /**
  * User: mtrupkin
@@ -86,5 +87,10 @@ class RootScreen(val size: Size) extends Screen {
 case class ScreenChar(c: Char, fg: RGBColor = White, bg: RGBColor = Black)
 
 object ScreenChar {
+  implicit object RGBColorFormat extends Format[Char] {
+    def reads(json: JsValue): JsResult[Char] = json.validate[String].map(_.charAt(0))
+    def writes(u: Char): JsValue = JsString(u.toString)
+  }
+  implicit val format = Json.format[ScreenChar]
   val Blank = ScreenChar(' ')
 }
