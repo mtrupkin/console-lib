@@ -26,11 +26,13 @@ class World(
     time += elapsed
     tileMap.update(elapsed)
   }
+
   def act(direction: Point): Boolean = {
     val action = tryAct(direction)
     if (action) {
-      //encounter.nextTurn()
-      encounter.simulate
+      encounter.nextTurn()
+      agents = agents.filter(_.hitPoints >= 0)
+      //encounter.simulate
     }
 
     action
