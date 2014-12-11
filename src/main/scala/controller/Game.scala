@@ -100,11 +100,18 @@ trait Game { self: ControllerStateMachine =>
       }
     }
 
+    val label6 = new Control {
+      override def minSize = Size(20, 1)
+      override def render(screen: Screen): Unit = {
+        screen.write(s"Round: ${world.encounter.round}  ")
+      }
+    }
+
     window.addControl(topPanel)
     window.addControl(bottomPanel)
 
     topPanel.addControls(Seq(mainPanel, detailPanel))
-    detailPanel.addControls(Seq(label1,label2,label3,label4, label5))
+    detailPanel.addControls(Seq(label1,label2,label3,label4, label5, label6))
 
     def update(elapsed: Int) {
       world.update(elapsed)
